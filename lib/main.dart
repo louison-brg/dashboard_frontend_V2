@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'screens/creator_dashboard.dart'; // Make sure this path is correct
+import 'screens/creator_dashboard.dart' as Creator; // Make sure this path is correct
 import 'models/creator_info.dart'; // Make sure this path is correct
 import 'services/youtube_api_service.dart'; // Make sure this path is correct
 
@@ -20,7 +20,26 @@ class MyApp extends StatelessWidget {
           seedColor: Colors.blue,
         ),
       ),
-      home: CreatorDashboard(),
+      home: Creator.CreatorDashboard(),
+    );
+  }
+}
+
+class MyNetworkImage extends StatefulWidget {
+  @override
+  _MyNetworkImageState createState() => _MyNetworkImageState();
+}
+
+class _MyNetworkImageState extends State<MyNetworkImage> {
+  @override
+  Widget build(BuildContext context) {
+    return Image.network(
+      'https://yt3.ggpht.com/ytc/AIdro_nJXKFW82upNmPtUK-oykmjF-UDNvW6vuj-AVODmw=s88-c-k-c0xffffffff-no-rj-mo',
+      scale: 1.0,
+      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+        // Cette fonction est appelée lorsqu'une erreur de chargement se produit
+        return Icon(Icons.error); // Icône d'erreur affichée en cas d'échec de chargement de l'image
+      },
     );
   }
 }

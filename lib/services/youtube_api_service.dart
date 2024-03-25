@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/creator_info.dart';
+import '../models/post_info.dart';
 import '../services/youtube_api_service.dart';
 
 class YoutubeApiService {
@@ -18,8 +19,14 @@ class YoutubeApiService {
     }
   }
 
-// Optionally, if you have other endpoints, you can add more methods here
-// For example, to fetch the latest posts by channel ID
-// Future<List<PostInfo>> fetchLatestPosts(String channelId) async { ... }
+  Future<List<PostInfo>> fetchLatestPosts(String channelId) async {
+    final response = await http.get(Uri.parse('$_baseUrl/getLatestPosts?channelId=$channelId'));
+    if (response.statusCode == 200) {
+      Iterable jsonResponse = json.decode(response.body);
+      return List<PostInfo>.from(jsonResponse.map((model) => PostInfo.fromJson(model)));
+    } else {
+      throw Exception('Failed to load latest posts');
+    }
+  }
 }
 
