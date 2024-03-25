@@ -22,7 +22,8 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
         final info = await _apiService.fetchCreatorInfo(query);
         PaletteGenerator? palette = await PaletteGenerator.fromImageProvider(
           NetworkImage(info.channelProfilePicLink),
-          size: Size(110, 110), // La taille de la zone pour choisir les couleurs
+          size:
+              Size(110, 110), // La taille de la zone pour choisir les couleurs
           maximumColorCount: 20, // Le nombre maximal de couleurs à choisir
         );
         setState(() {
@@ -35,7 +36,6 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
       }
     }
   }
-
 
   void _updatePaletteGenerator(String imageUrl) async {
     final PaletteGenerator generator = await PaletteGenerator.fromImageProvider(
@@ -57,8 +57,10 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: _paletteGenerator?.dominantColor?.color ?? Theme.of(context).colorScheme.primary,
-        title: Text('YouTube Creator Dashboard', style: TextStyle(color: Colors.white)),
+        backgroundColor: _paletteGenerator?.dominantColor?.color ??
+            Theme.of(context).colorScheme.primary,
+        title: Text('YouTube Creator Dashboard',
+            style: TextStyle(color: Colors.white)),
         actions: [
           IconButton(
             icon: Icon(Icons.search, color: Colors.white),
@@ -68,7 +70,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
       ),
       body: Center(
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: isWideScreen ? 600 : double.infinity),
+          constraints: const BoxConstraints(maxWidth: 400),
           child: Column(
             children: [
               Padding(
@@ -78,15 +80,16 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                   decoration: InputDecoration(
                     labelText: 'Enter YouTuber Name',
                     suffixIcon: IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed:(){ _fetchCreatorInfo();} // Appelé quand on clique sur l'icône de recherche
-                    ),
+                        icon: Icon(Icons.search),
+                        onPressed: () {
+                          _fetchCreatorInfo();
+                        } // Appelé quand on clique sur l'icône de recherche
+                        ),
                   ),
                   onSubmitted: (value) {
                     _fetchCreatorInfo(); // Appelé quand on appuie sur Entrée
                   },
                 ),
-
               ),
               if (_creatorInfo != null)
                 Card(
@@ -98,13 +101,17 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CircleAvatar(
-                          backgroundImage: NetworkImage(_creatorInfo!.channelProfilePicLink),
+                          backgroundImage:
+                              NetworkImage(_creatorInfo!.channelProfilePicLink),
                           radius: 40,
                         ),
                         SizedBox(height: 16),
                         Text(
                           _creatorInfo!.channelName,
-                          style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight: FontWeight.bold),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline5
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 8),
                         Text(
@@ -118,11 +125,13 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              _buildStatistic('Subscribers', _creatorInfo!.subscriberCount),
+                              _buildStatistic(
+                                  'Subscribers', _creatorInfo!.subscriberCount),
                               VerticalDivider(),
                               _buildStatistic('Views', _creatorInfo!.viewCount),
                               VerticalDivider(),
-                              _buildStatistic('Videos', _creatorInfo!.videoCount),
+                              _buildStatistic(
+                                  'Videos', _creatorInfo!.videoCount),
                             ],
                           ),
                         ),
@@ -144,7 +153,10 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
         children: [
           Text(
             value,
-            style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(context)
+                .textTheme
+                .headline6
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 4),
           Text(
