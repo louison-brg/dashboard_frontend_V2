@@ -99,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 videos: _creatorInfo!.videoCount,
                 description: _creatorInfo!.channelDescription,
                 imageUrl: _creatorInfo!.channelProfilePicLink,
-                backgroundColor: _paletteGenerator?.dominantColor?.color ?? Theme.of(context).cardColor,
+                backgroundColor: (_paletteGenerator?.dominantColor?.color ?? Theme.of(context).cardColor).withOpacity(0.7),
               ),
           ],
         ),
