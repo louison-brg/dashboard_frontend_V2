@@ -24,7 +24,7 @@ class CreatorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final brightness = ThemeData.estimateBrightnessForColor(backgroundColor);
     final textColor =
-        brightness == Brightness.dark ? Colors.white : Colors.black;
+    brightness == Brightness.dark ? Colors.white : Colors.black;
 
     return Align(
       alignment: Alignment.topLeft,
@@ -33,8 +33,8 @@ class CreatorCard extends StatelessWidget {
         children: [
           Card(
             elevation: 4.0,
-            color: backgroundColor
-                .withOpacity(0.7), // Réduit l'opacité de la couleur de fond
+            color: backgroundColor.withOpacity(0.7),
+            // Réduit l'opacité de la couleur de fond
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -45,12 +45,12 @@ class CreatorCard extends StatelessWidget {
                     child: Container(
                       width: 450,
                       height: 200,
-                      margin: const EdgeInsets.only(left: 8.0),
+                      margin: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
                           CircleAvatar(
                             backgroundColor: Colors.transparent,
-                            radius: 80.0,
+                            radius: 70.0,
                             child: ClipOval(
                               child: Image.network(
                                 imageUrl,
@@ -65,9 +65,10 @@ class CreatorCard extends StatelessWidget {
                               creatorName,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.bold,
-                                  color: textColor),
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                                color: textColor,
+                              ),
                             ),
                           ),
                         ],
@@ -78,80 +79,80 @@ class CreatorCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 4),
-          SizedBox(
-            width: 490,
-            height: 356,
-            child: Card(
-              elevation: 4.0,
-              color: backgroundColor
-                  .withOpacity(0.7), // Réduit l'opacité de la couleur de fond
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 10),
-                    Card(
-                      elevation: 2.0,
-                      color: backgroundColor.withOpacity(0.7),
-                      child: SizedBox(
-                        width: double
-                            .infinity, // Définit la largeur de la Card à la largeur maximale disponible
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: _buildText("$subscribers Abonnés", textColor),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Card(
-                      elevation: 2.0,
-                      color: backgroundColor.withOpacity(0.7),
-                      child: SizedBox(
-                        width: double
-                            .infinity, // Définit la largeur de la Card à la largeur maximale disponible
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: _buildText("$views Vues", textColor),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Card(
-                      elevation: 2.0,
-                      color: backgroundColor.withOpacity(0.7),
-                      child: SizedBox(
-                        width: double
-                            .infinity, // Définit la largeur de la Card à la largeur maximale disponible
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: _buildText("$videos Vidéos", textColor),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Card(
-                      elevation: 2.0,
-                      color: backgroundColor.withOpacity(0.7),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 125,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            description,
-                            textAlign: TextAlign.justify,
-                            style: TextStyle(fontSize: 14, color: textColor),
+          SizedBox(height: 4),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: SizedBox(
+              width: 490,
+              height: 294,
+              child: Card(
+                elevation: 4.0,
+                color: backgroundColor.withOpacity(0.7),
+                // Réduit l'opacité de la couleur de fond
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 5),
+                      Card(
+                        elevation: 2.0,
+                        color: backgroundColor.withOpacity(0.7),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: _buildText(
+                                "$subscribers Abonnés", textColor),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 5),
+                      Card(
+                        elevation: 2.0,
+                        color: backgroundColor.withOpacity(0.7),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: _buildText("$views Vues", textColor),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Card(
+                        elevation: 2.0,
+                        color: backgroundColor.withOpacity(0.7),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: _buildText("$videos Vidéos", textColor),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Card(
+                        elevation: 2.0,
+                        color: backgroundColor.withOpacity(0.7),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Description: $description",
+                              textAlign: TextAlign.justify,
+                              style: TextStyle(fontSize: 14, color: textColor),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

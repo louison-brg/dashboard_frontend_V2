@@ -57,7 +57,7 @@ class _ComponentDecorationState extends State<ComponentDecoration> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 5.0, vertical: 20.0),
+                          horizontal: 5.0, vertical: 10.0),
                       child: Center(
                         child: widget.child,
                       ),

@@ -80,11 +80,12 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.only(left: 10.0,top: 1.0),
                 child: TextFields(onSearch: _fetchCreatorInfo),
               ),
               if (_creatorInfo != null)
-                CreatorCard(
+                Padding(padding: const EdgeInsets.only(left: 10),
+                child: CreatorCard(
                   creatorName: _creatorInfo!.channelName,
                   subscribers: _creatorInfo!.subscriberCount,
                   views: _creatorInfo!.viewCount,
@@ -93,7 +94,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                   imageUrl: _creatorInfo!.channelProfilePicLink,
                   backgroundColor: (_paletteGenerator?.dominantColor?.color ??
                           Theme.of(context).cardColor)
-                      .withOpacity(0.7),
+                      .withOpacity(0.7),),
                 ),
             ],
           ),
