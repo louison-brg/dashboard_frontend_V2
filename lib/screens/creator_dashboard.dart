@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/creator_info.dart';
 import '../services/youtube_api_service.dart';
 import 'package:palette_generator/palette_generator.dart';
+import '../widgets/creator_card.dart';
 import '../widgets/search_bar.dart';
 
 class CreatorDashboard extends StatefulWidget {
@@ -67,62 +68,26 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
             style: TextStyle(color: Colors.white)),
       ),
       body: Align(
-        alignment:Alignment.centerLeft,
+        alignment: Alignment.centerLeft,
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 400),
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: TextFields(onSearch: _fetchCreatorInfo,)
+                child: TextFields(onSearch: _fetchCreatorInfo),
               ),
               if (_creatorInfo != null)
-                Card(
-                  elevation: 4,
-                  margin: const EdgeInsets.all(16.0),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(_creatorInfo!.channelProfilePicLink),
-                          radius: 40,
-                        ),
-                        const SizedBox(height: 25),
-                        Text(
-                          _creatorInfo!.channelName,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline5
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          _creatorInfo!.channelDescription,
-                          style: Theme.of(context).textTheme.bodyText2,
-                        ),
-                        const SizedBox(height: 16),
-                        const Divider(),
-                        const SizedBox(height: 16),
-                        IntrinsicHeight(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              _buildStatistic(
-                                  'Subscribers', _creatorInfo!.subscriberCount),
-                              const VerticalDivider(),
-                              _buildStatistic('Views', _creatorInfo!.viewCount),
-                              const VerticalDivider(),
-                              _buildStatistic(
-                                  'Videos', _creatorInfo!.videoCount),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                CreatorCard(
+                  creatorName: _creatorInfo!.channelName,
+                  subscribers: _creatorInfo!.subscriberCount,
+                  views: _creatorInfo!.viewCount,
+                  videos: _creatorInfo!.videoCount,
+                  description: _creatorInfo!.channelDescription,
+                  imageUrl: _creatorInfo!.channelProfilePicLink,
+                  backgroundColor: (_paletteGenerator?.dominantColor?.color ??
+                          Theme.of(context).cardColor)
+                      .withOpacity(0.7),
                 ),
             ],
           ),

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +10,6 @@ const double cardWidth = 115;
 const double widthConstraint = 450;
 
 class ComponentDecoration extends StatefulWidget {
-
   const ComponentDecoration({
     super.key,
     this.label = '',
@@ -38,7 +36,7 @@ class _ComponentDecorationState extends State<ComponentDecoration> {
           children: [
             ConstrainedBox(
               constraints:
-              const BoxConstraints.tightFor(width: widthConstraint),
+                  const BoxConstraints.tightFor(width: widthConstraint),
               // Tapping within the a component card should request focus
               // for that component's children.
               child: Focus(
@@ -110,11 +108,7 @@ class ComponentGroupDecoration extends StatelessWidget {
 class TextFields extends StatefulWidget {
   final Function(String) onSearch;
 
-
-  const TextFields({
-    super.key,
-    required this.onSearch
-  });
+  const TextFields({super.key, required this.onSearch});
 
   @override
   State<TextFields> createState() => _TextFieldsState();
@@ -127,35 +121,38 @@ class _TextFieldsState extends State<TextFields> {
   Widget build(BuildContext context) {
     return ComponentDecoration(
       child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-      Padding(
-        padding: const EdgeInsets.all(smallSpacing),
-        child: TextField(
-          controller: _controllerFilled,
-          onSubmitted: (value){
-            widget.onSearch(value);
-          },
-          decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.search),
-            labelText: 'Select a Youtuber',
-            filled: true,
-            contentPadding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Theme.of(context).colorScheme.onPrimary, width: 2.0),
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(smallSpacing),
+            child: TextField(
+              controller: _controllerFilled,
+              onSubmitted: (value) {
+                widget.onSearch(value);
+              },
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search),
+                labelText: 'Select a Youtuber',
+                filled: true,
+                contentPadding: const EdgeInsets.symmetric(
+                    vertical: 15.0, horizontal: 15.0),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      width: 2.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer),
+                ),
               ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Theme.of(context).colorScheme.onPrimaryContainer),
-              ),
+            ),
           ),
-        ),
-      ),
-          ],
+        ],
       ),
     );
   }
 }
-
 
