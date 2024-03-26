@@ -5,28 +5,11 @@ import 'models/creator_info.dart'; // Make sure this path is correct
 import 'services/youtube_api_service.dart'; // Make sure this path is correct
 import 'screens/creator_dashboard.dart';
 
-void main() async {
-  runApp(App());
+void main() {
+  runApp(MyApp());
 }
 
-class App extends StatefulWidget {
-  const App({super.key});
-
-  @override
-  State<App> createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-
-  void handleImageSelect(String imageUrl) {
-    final String url = ColorImageProvider.values[value].url;
-    ColorScheme.fromImageProvider(provider: NetworkImage(url))
-        .then((newScheme) {
-      setState(() {
-        imageColorScheme = newScheme;
-      });
-    });
-  }
+class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +18,13 @@ class _AppState extends State<App> {
       theme: ThemeData(
         useMaterial3: true,
         // Define the base theme with Material 3 features
-        colorSchemeSeed:
-          Colors.blue,
-        colorScheme:
-          ? imageColorScheme.color
-          : null,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+        ),
       ),
       home:
       CreatorDashboard(),
     );
   }
 }
+
