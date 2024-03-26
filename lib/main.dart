@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'models/creator_info.dart'; // Make sure this path is correct
-import 'services/youtube_api_service.dart'; // Make sure this path is correct
-import 'screens/creator_dashboard.dart' as creator;
+import 'models/creator_info.dart';
+import 'services/youtube_api_service.dart';
+import 'widgets/creator_card.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,17 +20,17 @@ class MyApp extends StatelessWidget {
           seedColor: Colors.blue,
         ),
       ),
-      home: creator.CreatorDashboard(),
+      home: MyHomePage(), // Utilisez MyHomePage comme page d'accueil
     );
   }
 }
 
-class CreatorDashboard extends StatefulWidget {
+class MyHomePage extends StatefulWidget {
   @override
-  _CreatorDashboardState createState() => _CreatorDashboardState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _CreatorDashboardState extends State<CreatorDashboard> {
+class _MyHomePageState extends State<MyHomePage> {
   final YoutubeApiService _apiService = YoutubeApiService();
   final TextEditingController _controller = TextEditingController();
   CreatorInfo? _creatorInfo;
@@ -49,7 +49,6 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
         });
       } catch (e) {
         print(e); // Log the error
-        // Show an error dialog
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -92,25 +91,16 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
               onSubmitted: (_) => _fetchCreatorInfo(),
             ),
             SizedBox(height: 20),
-            if (_creatorInfo != null) ...[
-              CircleAvatar(
-                backgroundImage: NetworkImage(_creatorInfo!.channelProfilePicLink),
-                radius: 64,
+            if (_creatorInfo != null) // Vérifiez que _creatorInfo n'est pas nul
+              CreatorCard(
+                creatorName: _creatorInfo!.channelName,
+                subscribers: _creatorInfo!.subscriberCount,
+                views: _creatorInfo!.viewCount,
+                videos: _creatorInfo!.videoCount,
+                description: _creatorInfo!.channelDescription,
+                imageUrl: _creatorInfo!.channelProfilePicLink,
+                backgroundColor: (_paletteGenerator?.dominantColor?.color ?? Theme.of(context).cardColor).withOpacity(0.7),
               ),
-              SizedBox(height: 8),
-              Text(
-                _creatorInfo!.channelName,
-                style: Theme.of(context).textTheme.headline5,
-              ),
-              Text(
-                _creatorInfo!.channelDescription,
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              const SizedBox(height: 8),
-              Text('Subscribers: ${_creatorInfo!.subscriberCount}'),
-              Text('Views: ${_creatorInfo!.viewCount}'),
-              Text('Videos: ${_creatorInfo!.videoCount}'),
-            ],
           ],
         ),
       ),
