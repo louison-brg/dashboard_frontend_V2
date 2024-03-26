@@ -9,7 +9,8 @@ class YoutubeApiService {
 
   // Fetches creator information by channel name
   Future<CreatorInfo> fetchCreatorInfo(String channelName) async {
-    final response = await http.get(Uri.parse('$_baseUrl/getCreatorInfos?channelName=$channelName'));
+    final response = await http
+        .get(Uri.parse('$_baseUrl/getCreatorInfos?channelName=$channelName'));
     if (response.statusCode == 200) {
       return CreatorInfo.fromJson(json.decode(response.body));
     } else {
@@ -22,4 +23,3 @@ class YoutubeApiService {
 // For example, to fetch the latest posts by channel ID
 // Future<List<PostInfo>> fetchLatestPosts(String channelId) async { ... }
 }
-

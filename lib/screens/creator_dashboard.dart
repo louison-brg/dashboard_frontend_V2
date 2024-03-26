@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/creator_info.dart';
 import '../services/youtube_api_service.dart';
 import 'package:palette_generator/palette_generator.dart';
+import '../widgets/creator_card.dart';
+import '../widgets/search_bar.dart';
 
 class CreatorDashboard extends StatefulWidget {
   @override
@@ -15,24 +17,33 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
   PaletteGenerator? _paletteGenerator;
 
   // Here we define the _fetchCreatorInfo method
-  void _fetchCreatorInfo() async {
-    final String query = _controller.text.trim();
-    if (query.isNotEmpty) {
+  void _fetchCreatorInfo(String youtuberName) async {
+    if (youtuberName.isNotEmpty) {
       try {
-        final info = await _apiService.fetchCreatorInfo(query);
-        PaletteGenerator? palette = await PaletteGenerator.fromImageProvider(
+        final info = await _apiService.fetchCreatorInfo(youtuberName);
+        final palette = await PaletteGenerator.fromImageProvider(
           NetworkImage(info.channelProfilePicLink),
-          size:
-              const Size(110, 110), // La taille de la zone pour choisir les couleurs
-          maximumColorCount: 20, // Le nombre maximal de couleurs à choisir
         );
         setState(() {
           _creatorInfo = info;
           _paletteGenerator = palette;
         });
       } catch (e) {
-        // Affichez un message d'erreur si quelque chose se passe mal
-        print('Error fetching creator info: $e');
+        print(e); // Log the error
+        // Show an error dialog
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Error'),
+            content: Text('Failed to fetch data. Please try again later.'),
+            actions: [
+              TextButton(
+                child: Text('OK'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
       }
     }
   }
@@ -61,84 +72,28 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
             Theme.of(context).colorScheme.primary,
         title: const Text('YouTube Creator Dashboard',
             style: TextStyle(color: Colors.white)),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.white),
-            onPressed: _fetchCreatorInfo,
-          ),
-        ],
       ),
       body: Align(
-        alignment:Alignment.centerLeft,
+        alignment: Alignment.centerLeft,
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 400),
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: TextField(
-                  controller: _controller,
-                  decoration: InputDecoration(
-                    labelText: 'Enter YouTuber Name',
-                    suffixIcon: IconButton(
-                        icon: const Icon(Icons.search),
-                        onPressed: () {
-                          _fetchCreatorInfo();
-                        } // Appelé quand on clique sur l'icône de recherche
-                        ),
-                  ),
-                  onSubmitted: (value) {
-                    _fetchCreatorInfo(); // Appelé quand on appuie sur Entrée
-                  },
-                ),
+                child: TextFields(onSearch: _fetchCreatorInfo),
               ),
               if (_creatorInfo != null)
-                Card(
-                  elevation: 4,
-                  margin: const EdgeInsets.all(16.0),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(_creatorInfo!.channelProfilePicLink),
-                          radius: 40,
-                        ),
-                        const SizedBox(height: 25),
-                        Text(
-                          _creatorInfo!.channelName,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline5
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          _creatorInfo!.channelDescription,
-                          style: Theme.of(context).textTheme.bodyText2,
-                        ),
-                        const SizedBox(height: 16),
-                        const Divider(),
-                        const SizedBox(height: 16),
-                        IntrinsicHeight(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              _buildStatistic(
-                                  'Subscribers', _creatorInfo!.subscriberCount),
-                              const VerticalDivider(),
-                              _buildStatistic('Views', _creatorInfo!.viewCount),
-                              const VerticalDivider(),
-                              _buildStatistic(
-                                  'Videos', _creatorInfo!.videoCount),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                CreatorCard(
+                  creatorName: _creatorInfo!.channelName,
+                  subscribers: _creatorInfo!.subscriberCount,
+                  views: _creatorInfo!.viewCount,
+                  videos: _creatorInfo!.videoCount,
+                  description: _creatorInfo!.channelDescription,
+                  imageUrl: _creatorInfo!.channelProfilePicLink,
+                  backgroundColor: (_paletteGenerator?.dominantColor?.color ??
+                          Theme.of(context).cardColor)
+                      .withOpacity(0.7),
                 ),
             ],
           ),
