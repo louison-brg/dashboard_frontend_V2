@@ -36,19 +36,6 @@ class _ComponentDecorationState extends State<ComponentDecoration> {
         padding: const EdgeInsets.symmetric(vertical: smallSpacing),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(widget.label,
-                    style: Theme.of(context).textTheme.titleSmall),
-                Tooltip(
-                  message: widget.tooltipMessage,
-                  child: const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Icon(Icons.info_outline, size: 16)),
-                ),
-              ],
-            ),
             ConstrainedBox(
               constraints:
               const BoxConstraints.tightFor(width: widthConstraint),
@@ -120,98 +107,55 @@ class ComponentGroupDecoration extends StatelessWidget {
   }
 }
 
-
-class SearchAnchors extends StatefulWidget {
+class TextFields extends StatefulWidget {
   final Function(String) onSearch;
 
-  const SearchAnchors({
+
+  const TextFields({
     super.key,
-    required this.onSearch,
-});
+    required this.onSearch
+  });
 
   @override
-  State<SearchAnchors> createState() => _SearchAnchorsState();
+  State<TextFields> createState() => _TextFieldsState();
 }
 
-class _SearchAnchorsState extends State<SearchAnchors> {
-  final TextEditingController _controller = TextEditingController();
-
-  String? selectedYoutuber;
-  List<String> searchHistory = [];
-
-  Iterable<Widget> getHistoryList(SearchController controller) {
-    return searchHistory.map((youtuber) => ListTile(
-      leading: const Icon(Icons.history),
-      title: Text(youtuber),
-      trailing: IconButton(
-          icon: const Icon(Icons.call_missed),
-          onPressed: () {
-            controller.text = youtuber;
-            controller.selection =
-                TextSelection.collapsed(offset: controller.text.length);
-          }),
-      onTap: () {
-        controller.closeView(youtuber);
-        handleSelection(youtuber);
-      },
-    ));
-  }
-
-  Iterable<Widget> getSuggestions(SearchController controller) {
-    final String input = controller.value.text;
-    return searchHistory
-        .where((youtuber) => youtuber.contains(input))
-        .map((filteredYoutuber) => ListTile(
-      leading: CircleAvatar(),
-      title: Text(filteredYoutuber),
-      trailing: IconButton(
-          icon: const Icon(Icons.call_missed),
-          onPressed: () {
-            controller.text = filteredYoutuber;
-            controller.selection =
-                TextSelection.collapsed(offset: controller.text.length);
-          }),
-      onTap: () {
-        controller.closeView(filteredYoutuber);
-        handleSelection(filteredYoutuber);
-      },
-    ));
-  }
-
-  void handleSelection(String youtuber) {
-    setState(() {
-      selectedYoutuber = youtuber;
-      if (searchHistory.length >= 5) {
-        searchHistory.removeLast();
-      }
-      searchHistory.insert(0, youtuber);
-    });
-  }
+class _TextFieldsState extends State<TextFields> {
+  final TextEditingController _controllerFilled = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return ComponentDecoration(
       child: Column(
-        children: <Widget>[
-          SearchAnchor.bar(
-            barHintText: 'Search a youtuber ',
-            suggestionsBuilder: (context, controller) {
-              if (controller.text.isEmpty) {
-                if (searchHistory.isNotEmpty) {
-                  return getHistoryList(controller);
-                }
-                return <Widget>[
-                  const Center(
-                    child: Text('No search history.',
-                        style: TextStyle(color: Colors.grey)),
-                  )
-                ];
-              }
-              return getSuggestions(controller);
-            },
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+      Padding(
+        padding: const EdgeInsets.all(smallSpacing),
+        child: TextField(
+          controller: _controllerFilled,
+          onSubmitted: (value){
+            widget.onSearch(value);
+          },
+          decoration: InputDecoration(
+            prefixIcon: const Icon(Icons.search),
+            labelText: 'Select a Youtuber',
+            filled: true,
+            contentPadding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(color: Theme.of(context).colorScheme.onPrimary, width: 2.0),
+              ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(color: Theme.of(context).colorScheme.onPrimaryContainer),
+              ),
           ),
-        ],
+        ),
+      ),
+          ],
       ),
     );
   }
 }
+
+
