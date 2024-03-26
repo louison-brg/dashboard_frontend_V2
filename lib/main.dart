@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'screens/creator_dashboard.dart'; // Make sure this path is correct
 import 'models/creator_info.dart'; // Make sure this path is correct
 import 'services/youtube_api_service.dart'; // Make sure this path is correct
+import 'screens/creator_dashboard.dart' as creator;
 
 void main() {
   runApp(MyApp());
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
           seedColor: Colors.blue,
         ),
       ),
-      home: CreatorDashboard(),
+      home: creator.CreatorDashboard(),
     );
   }
 }
@@ -106,7 +106,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                 _creatorInfo!.channelDescription,
                 style: Theme.of(context).textTheme.bodyText1,
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text('Subscribers: ${_creatorInfo!.subscriberCount}'),
               Text('Views: ${_creatorInfo!.viewCount}'),
               Text('Videos: ${_creatorInfo!.videoCount}'),
