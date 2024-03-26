@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'models/creator_info.dart'; // Make sure this path is correct
 import 'services/youtube_api_service.dart'; // Make sure this path is correct
-import 'screens/creator_dashboard.dart';
+import 'screens/creator_dashboard.dart' as creator;
 
 void main() {
   runApp(MyApp());
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
           seedColor: Colors.blue,
         ),
       ),
-      home: CreatorDashboard(),
+      home: creator.CreatorDashboard(),
     );
   }
 }

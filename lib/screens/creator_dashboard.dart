@@ -23,7 +23,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
         PaletteGenerator? palette = await PaletteGenerator.fromImageProvider(
           NetworkImage(info.channelProfilePicLink),
           size:
-              Size(110, 110), // La taille de la zone pour choisir les couleurs
+              const Size(110, 110), // La taille de la zone pour choisir les couleurs
           maximumColorCount: 20, // Le nombre maximal de couleurs à choisir
         );
         setState(() {
@@ -59,16 +59,17 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
       appBar: AppBar(
         backgroundColor: _paletteGenerator?.dominantColor?.color ??
             Theme.of(context).colorScheme.primary,
-        title: Text('YouTube Creator Dashboard',
+        title: const Text('YouTube Creator Dashboard',
             style: TextStyle(color: Colors.white)),
         actions: [
           IconButton(
-            icon: Icon(Icons.search, color: Colors.white),
+            icon: const Icon(Icons.search, color: Colors.white),
             onPressed: _fetchCreatorInfo,
           ),
         ],
       ),
-      body: Center(
+      body: Align(
+        alignment:Alignment.centerLeft,
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 400),
           child: Column(
@@ -80,7 +81,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                   decoration: InputDecoration(
                     labelText: 'Enter YouTuber Name',
                     suffixIcon: IconButton(
-                        icon: Icon(Icons.search),
+                        icon: const Icon(Icons.search),
                         onPressed: () {
                           _fetchCreatorInfo();
                         } // Appelé quand on clique sur l'icône de recherche
@@ -105,7 +106,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                               NetworkImage(_creatorInfo!.channelProfilePicLink),
                           radius: 40,
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 25),
                         Text(
                           _creatorInfo!.channelName,
                           style: Theme.of(context)
@@ -113,23 +114,23 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                               .headline5
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           _creatorInfo!.channelDescription,
                           style: Theme.of(context).textTheme.bodyText2,
                         ),
-                        SizedBox(height: 16),
-                        Divider(),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
+                        const Divider(),
+                        const SizedBox(height: 16),
                         IntrinsicHeight(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               _buildStatistic(
                                   'Subscribers', _creatorInfo!.subscriberCount),
-                              VerticalDivider(),
+                              const VerticalDivider(),
                               _buildStatistic('Views', _creatorInfo!.viewCount),
-                              VerticalDivider(),
+                              const VerticalDivider(),
                               _buildStatistic(
                                   'Videos', _creatorInfo!.videoCount),
                             ],
@@ -158,7 +159,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                 .headline6
                 ?.copyWith(fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text(
             label,
             style: Theme.of(context).textTheme.caption,
