@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_front/widgets/search_bar.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'models/creator_info.dart'; // Make sure this path is correct
 import 'services/youtube_api_service.dart'; // Make sure this path is correct
@@ -9,6 +10,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,7 +22,8 @@ class MyApp extends StatelessWidget {
           seedColor: Colors.blue,
         ),
       ),
-      home: creator.CreatorDashboard(),
+      home:
+      creator.CreatorDashboard(),
     );
   }
 }
@@ -36,10 +39,10 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
   CreatorInfo? _creatorInfo;
   PaletteGenerator? _paletteGenerator;
 
-  void _fetchCreatorInfo() async {
-    if (_controller.text.isNotEmpty) {
+  void _fetchCreatorInfo(String youtuberName) async {
+    if (youtuberName.isNotEmpty) {
       try {
-        final info = await _apiService.fetchCreatorInfo(_controller.text);
+        final info = await _apiService.fetchCreatorInfo(youtuberName);
         final palette = await PaletteGenerator.fromImageProvider(
           NetworkImage(info.channelProfilePicLink),
         );
@@ -79,17 +82,8 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextField(
-              controller: _controller,
-              decoration: InputDecoration(
-                labelText: 'Enter YouTuber Name',
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: _fetchCreatorInfo,
-                ),
-                border: OutlineInputBorder(),
-              ),
-              onSubmitted: (_) => _fetchCreatorInfo(),
+            SearchAnchors(
+              onSearch: _fetchCreatorInfo,
             ),
             SizedBox(height: 20),
             if (_creatorInfo != null) ...[
