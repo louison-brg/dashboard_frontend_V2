@@ -6,6 +6,7 @@ import '../widgets/creator_card.dart';
 import '../widgets/search_bar.dart';
 
 class CreatorDashboard extends StatefulWidget {
+
   @override
   _CreatorDashboardState createState() => _CreatorDashboardState();
 }
@@ -49,8 +50,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
   }
 
   void _updatePaletteGenerator(String imageUrl) async {
-    final PaletteGenerator generator = await PaletteGenerator.fromImageProvider(
-      NetworkImage(imageUrl),
+    final PaletteGenerator generator = await PaletteGenerator.fromImageProvider(NetworkImage(imageUrl),
       // ... Other properties
     );
     setState(() {
@@ -60,12 +60,6 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    // Use MediaQuery to get the screen size for responsive design
-    var screenSize = MediaQuery.of(context).size;
-
-    // Determine if we're on a wide screen or not
-    bool isWideScreen = screenSize.width > 600;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _paletteGenerator?.dominantColor?.color ??
