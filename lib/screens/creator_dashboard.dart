@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import '../models/creator_info.dart';
 import '../services/youtube_api_service.dart';
 import 'package:palette_generator/palette_generator.dart';
+import '../widgets/search_bar.dart';
 
 class CreatorDashboard extends StatefulWidget {
+
   @override
   _CreatorDashboardState createState() => _CreatorDashboardState();
 }
@@ -15,31 +17,39 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
   PaletteGenerator? _paletteGenerator;
 
   // Here we define the _fetchCreatorInfo method
-  void _fetchCreatorInfo() async {
-    final String query = _controller.text.trim();
-    if (query.isNotEmpty) {
+  void _fetchCreatorInfo(String youtuberName) async {
+    if (youtuberName.isNotEmpty) {
       try {
-        final info = await _apiService.fetchCreatorInfo(query);
-        PaletteGenerator? palette = await PaletteGenerator.fromImageProvider(
+        final info = await _apiService.fetchCreatorInfo(youtuberName);
+        final palette = await PaletteGenerator.fromImageProvider(
           NetworkImage(info.channelProfilePicLink),
-          size:
-              const Size(110, 110), // La taille de la zone pour choisir les couleurs
-          maximumColorCount: 20, // Le nombre maximal de couleurs à choisir
         );
         setState(() {
           _creatorInfo = info;
           _paletteGenerator = palette;
         });
       } catch (e) {
-        // Affichez un message d'erreur si quelque chose se passe mal
-        print('Error fetching creator info: $e');
+        print(e); // Log the error
+        // Show an error dialog
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Error'),
+            content: Text('Failed to fetch data. Please try again later.'),
+            actions: [
+              TextButton(
+                child: Text('OK'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
       }
     }
   }
 
   void _updatePaletteGenerator(String imageUrl) async {
-    final PaletteGenerator generator = await PaletteGenerator.fromImageProvider(
-      NetworkImage(imageUrl),
+    final PaletteGenerator generator = await PaletteGenerator.fromImageProvider(NetworkImage(imageUrl),
       // ... Other properties
     );
     setState(() {
@@ -49,24 +59,12 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    // Use MediaQuery to get the screen size for responsive design
-    var screenSize = MediaQuery.of(context).size;
-
-    // Determine if we're on a wide screen or not
-    bool isWideScreen = screenSize.width > 600;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _paletteGenerator?.dominantColor?.color ??
             Theme.of(context).colorScheme.primary,
         title: const Text('YouTube Creator Dashboard',
             style: TextStyle(color: Colors.white)),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.white),
-            onPressed: _fetchCreatorInfo,
-          ),
-        ],
       ),
       body: Align(
         alignment:Alignment.centerLeft,
@@ -76,21 +74,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: TextField(
-                  controller: _controller,
-                  decoration: InputDecoration(
-                    labelText: 'Enter YouTuber Name',
-                    suffixIcon: IconButton(
-                        icon: const Icon(Icons.search),
-                        onPressed: () {
-                          _fetchCreatorInfo();
-                        } // Appelé quand on clique sur l'icône de recherche
-                        ),
-                  ),
-                  onSubmitted: (value) {
-                    _fetchCreatorInfo(); // Appelé quand on appuie sur Entrée
-                  },
-                ),
+                child: TextFields(onSearch: _fetchCreatorInfo,)
               ),
               if (_creatorInfo != null)
                 Card(
