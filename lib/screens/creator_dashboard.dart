@@ -4,6 +4,7 @@ import '../services/youtube_api_service.dart';
 import 'package:palette_generator/palette_generator.dart';
 import '../widgets/creator_card.dart';
 import '../widgets/search_bar.dart';
+import '../widgets/view_chart.dart';
 
 class CreatorDashboard extends StatefulWidget {
 
@@ -69,28 +70,48 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
       ),
       body: Align(
         alignment: Alignment.centerLeft,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 400),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: TextFields(onSearch: _fetchCreatorInfo),
-              ),
-              if (_creatorInfo != null)
-                CreatorCard(
-                  creatorName: _creatorInfo!.channelName,
-                  subscribers: _creatorInfo!.subscriberCount,
-                  views: _creatorInfo!.viewCount,
-                  videos: _creatorInfo!.videoCount,
-                  description: _creatorInfo!.channelDescription,
-                  imageUrl: _creatorInfo!.channelProfilePicLink,
-                  backgroundColor: (_paletteGenerator?.dominantColor?.color ??
-                          Theme.of(context).cardColor)
-                      .withOpacity(0.7),
+        child: Row(
+          children: [
+            Expanded(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: TextFields(onSearch: _fetchCreatorInfo),
+                    ),
+                    if (_creatorInfo != null)
+                      CreatorCard(
+                        creatorName: _creatorInfo!.channelName,
+                        subscribers: _creatorInfo!.subscriberCount,
+                        views: _creatorInfo!.viewCount,
+                        videos: _creatorInfo!.videoCount,
+                        description: _creatorInfo!.channelDescription,
+                        imageUrl: _creatorInfo!.channelProfilePicLink,
+                        backgroundColor: (_paletteGenerator?.dominantColor?.color ??
+                            Theme.of(context).cardColor)
+                            .withOpacity(0.7),
+                      ),
+                  ],
                 ),
-            ],
-          ),
+              ),
+            ),
+            Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: ViewersChart(
+                          backgroundColor: (_paletteGenerator?.dominantColor?.color ?? Theme.of(context).cardColor.withOpacity(0.7),
+                        )
+                    )
+                  ],
+                )
+            )
+          ],
         ),
       ),
     );
