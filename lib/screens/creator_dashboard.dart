@@ -92,6 +92,11 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                   videos: _creatorInfo!.videoCount,
                   description: _creatorInfo!.channelDescription,
                   imageUrl: _creatorInfo!.channelProfilePicLink,
+                  youtubeLink: _creatorInfo!.youtubeLink,
+                  instagramLink: _creatorInfo!.instagramLink,
+                  facebookLink: _creatorInfo!.facebookLink,
+                  tiktokLink: _creatorInfo!.tiktokLink,
+                  twitterLink: _creatorInfo!.twitterLink,
                   backgroundColor: (_paletteGenerator?.dominantColor?.color ??
                           Theme.of(context).cardColor)
                       .withOpacity(0.7),),

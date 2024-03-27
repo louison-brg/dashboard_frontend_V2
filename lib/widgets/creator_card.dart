@@ -6,6 +6,11 @@ class CreatorCard extends StatelessWidget {
   final String views;
   final String videos;
   final String description;
+  final String youtubeLink;
+  final String instagramLink;
+  final String facebookLink;
+  final String tiktokLink;
+  final String twitterLink;
   final String imageUrl;
   final Color backgroundColor;
 
@@ -18,6 +23,12 @@ class CreatorCard extends StatelessWidget {
     required this.description,
     required this.imageUrl,
     required this.backgroundColor,
+    required this.youtubeLink,
+    required this.instagramLink,
+    required this.facebookLink,
+    required this.tiktokLink,
+    required this.twitterLink,
+
   }) : super(key: key);
 
   @override
