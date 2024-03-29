@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:url_launcher/url_launcher.dart'; // Import the url_launcher package
+
 
 class CreatorCard extends StatelessWidget {
   final String creatorName;
@@ -6,6 +9,10 @@ class CreatorCard extends StatelessWidget {
   final String views;
   final String videos;
   final String description;
+  final String youtubeLink;
+  final String instagramLink;
+  final String tiktokLink;
+  final String twitterLink;
   final String imageUrl;
   final Color backgroundColor;
 
@@ -18,13 +25,18 @@ class CreatorCard extends StatelessWidget {
     required this.description,
     required this.imageUrl,
     required this.backgroundColor,
+    required this.youtubeLink,
+    required this.instagramLink,
+    required this.tiktokLink,
+    required this.twitterLink,
+
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final brightness = ThemeData.estimateBrightnessForColor(backgroundColor);
     final textColor =
-        brightness == Brightness.dark ? Colors.white : Colors.black;
+    brightness == Brightness.dark ? Colors.white : Colors.black;
 
     return Align(
       alignment: Alignment.topLeft,
@@ -33,8 +45,7 @@ class CreatorCard extends StatelessWidget {
         children: [
           Card(
             elevation: 4.0,
-            color: backgroundColor
-                .withOpacity(0.7), // Réduit l'opacité de la couleur de fond
+            color: backgroundColor.withOpacity(0.7), // Réduit l'opacité de la couleur de fond
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -44,9 +55,10 @@ class CreatorCard extends StatelessWidget {
                     color: backgroundColor.withOpacity(0.7),
                     child: Container(
                       width: 450,
-                      height: 200,
-                      margin: const EdgeInsets.only(left: 8.0),
+                      height: 160,
+                      margin: const EdgeInsets.all(10.0),
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CircleAvatar(
                             backgroundColor: Colors.transparent,
@@ -60,15 +72,55 @@ class CreatorCard extends StatelessWidget {
                               ),
                             ),
                           ),
+                          SizedBox(width: 10), // Ajoute un espace entre l'avatar et le texte
                           Expanded(
-                            child: Text(
-                              creatorName,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.bold,
-                                  color: textColor),
+                            child:Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      creatorName.length > 16 ? // Vérifier si le nom a plus de 16 caractères
+                                      Text(
+                                        creatorName,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                          color: textColor,
+                                        ),
+                                      ) : // Si le nom a plus de 16 caractères
+                                      Expanded( // Centrer le texte
+                                        child: Align(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            creatorName,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold,
+                                              color: textColor,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 2.0), // Hauteur constante au-dessus des icônes
+                                  child: SocialMediaIcons(
+                                    youtubeLink: youtubeLink,
+                                    instagramLink: instagramLink,
+                                    twitterLink: twitterLink,
+                                    tiktokLink: tiktokLink,
+                                  ),
+                                ),
+                                SizedBox(height: 2.0), // Espace supplémentaire entre les icônes et le bas de la carte
+                              ],
                             ),
+
                           ),
                         ],
                       ),
@@ -78,80 +130,82 @@ class CreatorCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 4),
-          SizedBox(
-            width: 490,
-            height: 356,
-            child: Card(
-              elevation: 4.0,
-              color: backgroundColor
-                  .withOpacity(0.7), // Réduit l'opacité de la couleur de fond
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 10),
-                    Card(
-                      elevation: 2.0,
-                      color: backgroundColor.withOpacity(0.7),
-                      child: SizedBox(
-                        width: double
-                            .infinity, // Définit la largeur de la Card à la largeur maximale disponible
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: _buildText("$subscribers Abonnés", textColor),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Card(
-                      elevation: 2.0,
-                      color: backgroundColor.withOpacity(0.7),
-                      child: SizedBox(
-                        width: double
-                            .infinity, // Définit la largeur de la Card à la largeur maximale disponible
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: _buildText("$views Vues", textColor),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Card(
-                      elevation: 2.0,
-                      color: backgroundColor.withOpacity(0.7),
-                      child: SizedBox(
-                        width: double
-                            .infinity, // Définit la largeur de la Card à la largeur maximale disponible
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: _buildText("$videos Vidéos", textColor),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Card(
-                      elevation: 2.0,
-                      color: backgroundColor.withOpacity(0.7),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 125,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            description,
-                            textAlign: TextAlign.justify,
-                            style: TextStyle(fontSize: 14, color: textColor),
+
+          SizedBox(height: 4),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: SizedBox(
+              width: 490,
+              height: 294,
+              child: Card(
+                elevation: 4.0,
+                color: backgroundColor.withOpacity(0.7),
+                // Réduit l'opacité de la couleur de fond
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      //SizedBox(height: 5),
+                      Card(
+                        elevation: 2.0,
+                        color: backgroundColor.withOpacity(0.7),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: _buildText(
+                                "$subscribers Abonnés", textColor),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 5),
+                      Card(
+                        elevation: 2.0,
+                        color: backgroundColor.withOpacity(0.7),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: _buildText("$views Vues", textColor),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Card(
+                        elevation: 2.0,
+                        color: backgroundColor.withOpacity(0.7),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: _buildText("$videos Vidéos", textColor),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Card(
+                        elevation: 2.0,
+                        color: backgroundColor.withOpacity(0.7),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 88,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              description,
+                              textAlign: TextAlign.justify,
+                              style: TextStyle(fontSize: 14, color: textColor),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -167,5 +221,92 @@ class CreatorCard extends StatelessWidget {
         color: textColor,
       ),
     );
+  }
+}
+
+class SocialMediaIcons extends StatelessWidget {
+  final String? youtubeLink;
+  final String? instagramLink;
+  final String? tiktokLink;
+  final String? twitterLink;
+
+  SocialMediaIcons({
+    this.youtubeLink,
+    this.instagramLink,
+    this.tiktokLink,
+    this.twitterLink,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> socialButtons = [];
+    socialButtons.add(SizedBox(width: 10));
+
+    if (youtubeLink != "None") {
+      socialButtons.add(_buildSocialImageButton('../../assets/youtube.png', youtubeLink!));
+      socialButtons.add(SizedBox(width: 10));
+    } else {
+      socialButtons.add(_buildSocialImageButton('../../assets/youtube.png', youtubeLink));
+      socialButtons.add(SizedBox(width: 10));
+    }
+
+    if (instagramLink != "None") {
+      socialButtons.add(_buildSocialImageButton('../../assets/instagram.png', instagramLink!));
+      socialButtons.add(SizedBox(width: 10));
+    } else {
+      socialButtons.add(_buildSocialImageButton('../../assets/instagram.png', instagramLink));
+      socialButtons.add(SizedBox(width: 10));
+    }
+
+    if (twitterLink != "None") {
+      socialButtons.add(_buildSocialImageButton('../../assets/twitter.png', twitterLink!));
+      socialButtons.add(SizedBox(width: 10));
+    } else {
+      socialButtons.add(_buildSocialImageButton('../../assets/twitter.png', twitterLink));
+      socialButtons.add(SizedBox(width: 10));
+    }
+
+    if (tiktokLink != "None") {
+      socialButtons.add(_buildSocialImageButton('../../assets/tiktok.png', tiktokLink!));
+      socialButtons.add(SizedBox(width: 10));
+    } else {
+      socialButtons.add(_buildSocialImageButton('../../assets/tiktok.png', tiktokLink));
+      socialButtons.add(SizedBox(width: 10));
+    }
+
+    if (socialButtons.isNotEmpty) {
+      socialButtons.removeLast();
+    }
+
+    return Row(
+      children: socialButtons,
+    );
+  }
+
+  Widget _buildSocialImageButton(String imagePath, String? link) {
+    return link != "None"
+        ? InkWell(
+      onTap: () {
+        _launchURL(link!); // Lance le lien fourni
+      },
+      child: Image.asset(
+        imagePath,
+        width: 30,
+        height: 30,
+      ),
+    )
+        : Image.asset(
+      imagePath.replaceFirst('.png', '_black.png'), // Remplace l'icône par sa version noire
+      width: 34,
+      height: 34,
+    ); // Retourne un conteneur vide si le lien est nul
+  }
+
+  void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
