@@ -11,7 +11,6 @@ class CreatorCard extends StatelessWidget {
   final String description;
   final String youtubeLink;
   final String instagramLink;
-  final String facebookLink;
   final String tiktokLink;
   final String twitterLink;
   final String imageUrl;
@@ -28,7 +27,6 @@ class CreatorCard extends StatelessWidget {
     required this.backgroundColor,
     required this.youtubeLink,
     required this.instagramLink,
-    required this.facebookLink,
     required this.tiktokLink,
     required this.twitterLink,
 
@@ -115,9 +113,8 @@ class CreatorCard extends StatelessWidget {
                                   child: SocialMediaIcons(
                                     youtubeLink: youtubeLink,
                                     instagramLink: instagramLink,
-                                    facebookLink: facebookLink,
-                                    tiktokLink: tiktokLink,
                                     twitterLink: twitterLink,
+                                    tiktokLink: tiktokLink,
                                   ),
                                 ),
                                 SizedBox(height: 2.0), // Espace supplémentaire entre les icônes et le bas de la carte
@@ -230,66 +227,67 @@ class CreatorCard extends StatelessWidget {
 class SocialMediaIcons extends StatelessWidget {
   final String? youtubeLink;
   final String? instagramLink;
-  final String? facebookLink;
   final String? tiktokLink;
   final String? twitterLink;
 
   SocialMediaIcons({
     this.youtubeLink,
     this.instagramLink,
-    this.facebookLink,
     this.tiktokLink,
     this.twitterLink,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Créer une liste pour stocker les boutons et les SizedBox
     List<Widget> socialButtons = [];
     socialButtons.add(SizedBox(width: 10));
 
-    // Ajouter le bouton Instagram et SizedBox d'espacement si le lien est présent
+    if (youtubeLink != "None") {
+      socialButtons.add(_buildSocialImageButton('../../assets/youtube.png', youtubeLink!));
+      socialButtons.add(SizedBox(width: 10));
+    } else {
+      socialButtons.add(_buildSocialImageButton('../../assets/youtube_black.png', youtubeLink));
+      socialButtons.add(SizedBox(width: 10));
+    }
+
     if (instagramLink != "None") {
-      socialButtons.add(_buildSocialImageButton('../../assets/instagram.png', instagramLink));
+      socialButtons.add(_buildSocialImageButton('../../assets/instagram.png', instagramLink!));
+      socialButtons.add(SizedBox(width: 10));
+    } else {
+      socialButtons.add(_buildSocialImageButton('../../assets/instagram_black.png', instagramLink));
       socialButtons.add(SizedBox(width: 10));
     }
 
-    // Ajouter le bouton Facebook et SizedBox d'espacement si le lien est présent
-    if (facebookLink != "None") {
-      socialButtons.add(_buildSocialImageButton('../../assets/facebook.png', facebookLink));
-      socialButtons.add(SizedBox(width: 10));
-    }
-
-    // Ajouter le bouton TikTok et SizedBox d'espacement si le lien est présent
-    if (tiktokLink != "None") {
-      socialButtons.add(_buildSocialImageButton('../../assets/tiktok.png', tiktokLink));
-      socialButtons.add(SizedBox(width: 10));
-    }
-
-    // Ajouter le bouton Twitter et SizedBox d'espacement si le lien est présent
     if (twitterLink != "None") {
-      socialButtons.add(_buildSocialImageButton('../../assets/twitter.png', twitterLink));
+      socialButtons.add(_buildSocialImageButton('../../assets/twitter.png', twitterLink!));
+      socialButtons.add(SizedBox(width: 10));
+    } else {
+      socialButtons.add(_buildSocialImageButton('../../assets/twitter_black.png', twitterLink));
       socialButtons.add(SizedBox(width: 10));
     }
 
-    // Retirer le dernier SizedBox car il n'est pas nécessaire après le dernier bouton
+    if (tiktokLink != "None") {
+      socialButtons.add(_buildSocialImageButton('../../assets/tiktok.png', tiktokLink!));
+      socialButtons.add(SizedBox(width: 10));
+    } else {
+      socialButtons.add(_buildSocialImageButton('../../assets/tiktok_black.png', tiktokLink));
+      socialButtons.add(SizedBox(width: 10));
+    }
+
     if (socialButtons.isNotEmpty) {
       socialButtons.removeLast();
     }
 
-    // Retourner la rangée contenant les boutons sociaux
     return Row(
       children: socialButtons,
     );
   }
 
-
-
   Widget _buildSocialImageButton(String imagePath, String? link) {
     return link != "None"
         ? InkWell(
       onTap: () {
-        _launchURL(link!); // Launch the provided link
+        _launchURL(link!); // Lance le lien fourni
       },
       child: Image.asset(
         imagePath,
@@ -297,10 +295,13 @@ class SocialMediaIcons extends StatelessWidget {
         height: 30,
       ),
     )
-        : const SizedBox(); // Return an empty container if the link is null
+        : Image.asset(
+      imagePath.replaceFirst('.png', '_black.png'), // Remplace l'icône par sa version noire
+      width: 30,
+      height: 30,
+    ); // Retourne un conteneur vide si le lien est nul
   }
 
-  // Function to launch the provided URL
   void _launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
