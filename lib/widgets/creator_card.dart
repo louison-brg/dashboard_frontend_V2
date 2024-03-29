@@ -189,6 +189,7 @@ class CreatorCard extends StatelessWidget {
                         color: backgroundColor.withOpacity(0.7),
                         child: SizedBox(
                           width: double.infinity,
+                          height: 88,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
@@ -223,7 +224,6 @@ class CreatorCard extends StatelessWidget {
   }
 }
 
-
 class SocialMediaIcons extends StatelessWidget {
   final String? youtubeLink;
   final String? instagramLink;
@@ -246,7 +246,7 @@ class SocialMediaIcons extends StatelessWidget {
       socialButtons.add(_buildSocialImageButton('../../assets/youtube.png', youtubeLink!));
       socialButtons.add(SizedBox(width: 10));
     } else {
-      socialButtons.add(_buildSocialImageButton('../../assets/youtube_black.png', youtubeLink));
+      socialButtons.add(_buildSocialImageButton('../../assets/youtube.png', youtubeLink));
       socialButtons.add(SizedBox(width: 10));
     }
 
@@ -254,7 +254,7 @@ class SocialMediaIcons extends StatelessWidget {
       socialButtons.add(_buildSocialImageButton('../../assets/instagram.png', instagramLink!));
       socialButtons.add(SizedBox(width: 10));
     } else {
-      socialButtons.add(_buildSocialImageButton('../../assets/instagram_black.png', instagramLink));
+      socialButtons.add(_buildSocialImageButton('../../assets/instagram.png', instagramLink));
       socialButtons.add(SizedBox(width: 10));
     }
 
@@ -262,7 +262,7 @@ class SocialMediaIcons extends StatelessWidget {
       socialButtons.add(_buildSocialImageButton('../../assets/twitter.png', twitterLink!));
       socialButtons.add(SizedBox(width: 10));
     } else {
-      socialButtons.add(_buildSocialImageButton('../../assets/twitter_black.png', twitterLink));
+      socialButtons.add(_buildSocialImageButton('../../assets/twitter.png', twitterLink));
       socialButtons.add(SizedBox(width: 10));
     }
 
@@ -270,7 +270,7 @@ class SocialMediaIcons extends StatelessWidget {
       socialButtons.add(_buildSocialImageButton('../../assets/tiktok.png', tiktokLink!));
       socialButtons.add(SizedBox(width: 10));
     } else {
-      socialButtons.add(_buildSocialImageButton('../../assets/tiktok_black.png', tiktokLink));
+      socialButtons.add(_buildSocialImageButton('../../assets/tiktok.png', tiktokLink));
       socialButtons.add(SizedBox(width: 10));
     }
 
@@ -297,8 +297,8 @@ class SocialMediaIcons extends StatelessWidget {
     )
         : Image.asset(
       imagePath.replaceFirst('.png', '_black.png'), // Remplace l'icône par sa version noire
-      width: 30,
-      height: 30,
+      width: 34,
+      height: 34,
     ); // Retourne un conteneur vide si le lien est nul
   }
 
