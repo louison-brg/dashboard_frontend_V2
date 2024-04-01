@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_front/models/view_info.dart';
 import '../models/creator_info.dart';
 import '../services/youtube_api_service.dart';
 import 'package:palette_generator/palette_generator.dart';
@@ -16,19 +17,19 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
   final YoutubeApiService _apiService = YoutubeApiService();
   final TextEditingController _controller = TextEditingController();
   CreatorInfo? _creatorInfo;
-  PaletteGenerator? _paletteGenerator;
+  InfoChart? _infoChart;
+  ColorScheme? colorScheme;
 
   // Here we define the _fetchCreatorInfo method
   void _fetchCreatorInfo(String youtuberName) async {
     if (youtuberName.isNotEmpty) {
       try {
         final info = await _apiService.fetchCreatorInfo(youtuberName);
-        final palette = await PaletteGenerator.fromImageProvider(
-          NetworkImage(info.channelProfilePicLink),
+        final colorScheme = await ColorScheme.fromImageProvider(
+          provider: NetworkImage(info.channelProfilePicLink),
         );
         setState(() {
           _creatorInfo = info;
-          _paletteGenerator = palette;
         });
       } catch (e) {
         print(e); // Log the error
@@ -51,11 +52,11 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
   }
 
   void _updatePaletteGenerator(String imageUrl) async {
-    final PaletteGenerator generator = await PaletteGenerator.fromImageProvider(NetworkImage(imageUrl),
+    final ColorScheme newcolorScheme = await ColorScheme.fromImageProvider(provider: NetworkImage(imageUrl),
       // ... Other properties
     );
     setState(() {
-      _paletteGenerator = generator;
+      colorScheme = newcolorScheme;
     });
   }
 
@@ -63,8 +64,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: _paletteGenerator?.dominantColor?.color ??
-            Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.background,
         title: const Text('YouTube Creator Dashboard',
             style: TextStyle(color: Colors.white)),
       ),
@@ -90,9 +90,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                         videos: _creatorInfo!.videoCount,
                         description: _creatorInfo!.channelDescription,
                         imageUrl: _creatorInfo!.channelProfilePicLink,
-                        backgroundColor: (_paletteGenerator?.dominantColor?.color ??
-                            Theme.of(context).cardColor)
-                            .withOpacity(0.7),
+                        backgroundColor: Theme.of(context).colorScheme.background,
                       ),
                   ],
                 ),
@@ -103,11 +101,13 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: ViewersChart(
-                          backgroundColor: (_paletteGenerator?.dominantColor?.color ?? Theme.of(context).cardColor.withOpacity(0.7),
-                        )
-                    )
+                        padding: EdgeInsets.all(16.0)
+                    ),
+                    if (1 == 1)
+                      ViewersChart(
+                        baseColor: Theme.of(context).colorScheme.onPrimary,
+                        chartInfo: InfoChart("Mister V"),
+                          ),
                   ],
                 )
             )

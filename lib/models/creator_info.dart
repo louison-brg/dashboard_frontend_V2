@@ -8,6 +8,7 @@ class CreatorInfo {
   final String subscriberCount;
   final String videoCount;
 
+
   CreatorInfo({
     required this.channelDateOfCreation,
     required this.channelName,
@@ -17,6 +18,7 @@ class CreatorInfo {
     required this.viewCount,
     required this.subscriberCount,
     required this.videoCount,
+
   });
 
   factory CreatorInfo.fromJson(Map<String, dynamic> json) {
@@ -29,6 +31,7 @@ class CreatorInfo {
       viewCount: json['viewCount']?.toString() ?? '0',
       subscriberCount: json['subscriberCount']?.toString() ?? '0',
       videoCount: json['videoCount']?.toString() ?? '0',
+
     );
   }
 }

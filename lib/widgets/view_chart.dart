@@ -1,41 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:my_front/main.dart';
-
-
-
+import '../models/view_info.dart';
+import '../widgets/legend_list_widget.dart';
 
 class ViewersChart extends StatefulWidget {
   final Color baseColor;
+  final InfoChart chartInfo;
 
   ViewersChart({
+    Key? key,
     required this.baseColor,
-    super.key
-  });
+    required this.chartInfo,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => ViewersChartState();
 }
 
 class ViewersChartState extends State<ViewersChart> {
-  Widget bottomTitles(double value, TitleMeta meta) {
-    const style = TextStyle(fontSize: 10);
+  late InfoChart infoChart = InfoChart("Mister V");
+  bool _isLoading = true;
+  Color get baseColor => widget.baseColor;
+  int touchedIndex = -1;
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+  void loadData() async {
+    await infoChart.loadJsonData("Mister V");
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  Widget bottomTitles(double value, TitleMeta meta)  {
+    final brightness = ThemeData.estimateBrightnessForColor(baseColor);
+    final textColor = brightness == Brightness.dark ? Colors.white : Colors.black;
+    final style = TextStyle(fontSize: 10, color: textColor);
+    List<String> dates = infoChart.getDates();
     String text;
     switch (value.toInt()) {
       case 0:
-        text = 'Video 1';
+        text = dates[0];
         break;
       case 1:
-        text = 'Video 2';
+        text = dates[1];
         break;
       case 2:
-        text = 'Video 3';
+        text = dates[3];
         break;
       case 3:
-        text = 'Video 4';
+        text = dates[4];
         break;
       case 4:
-        text = 'Video 5';
+        text = dates[5];
         break;
       default:
         text = '';
@@ -43,17 +63,17 @@ class ViewersChartState extends State<ViewersChart> {
     }
     return SideTitleWidget(
       axisSide: meta.axisSide,
-      child: Text(text, style: style),
+      child: Text(style: style, text),
     );
   }
 
   Widget leftTitles(double value, TitleMeta meta) {
+    final brightness = ThemeData.estimateBrightnessForColor(baseColor);
+    final textColor = brightness == Brightness.dark ? Colors.white : Colors.black;
+    final style = TextStyle(fontSize: 10, color: textColor);
     if (value == meta.max) {
       return Container();
     }
-    const style = TextStyle(
-      fontSize: 10,
-    );
     return SideTitleWidget(
       axisSide: meta.axisSide,
       child: Text(
@@ -65,191 +85,161 @@ class ViewersChartState extends State<ViewersChart> {
 
   @override
   Widget build(BuildContext context) {
-
-    return AspectRatio(
-      aspectRatio: 2,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 16),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final barsSpace = 4.0 * constraints.maxWidth / 400;
-            final screenWidth = MediaQuery.of(context).size.width;
-            final barsWidth = 8.0 * screenWidth / 400;
-            return BarChart(
-              BarChartData(
-                alignment: BarChartAlignment.center,
-                barTouchData: BarTouchData(
-                  enabled: false,
-                ),
-                titlesData: FlTitlesData(
-                  show: true,
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 28,
-                      getTitlesWidget: bottomTitles,
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children :[
+          Text(
+              "Stats",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,)
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          LegendsListWidget(
+              legends: [
+                Legend("Comments", Theme.of(context).colorScheme.primary),
+                Legend("Like", Theme.of(context).colorScheme.primary.withOpacity(0.5)),
+                Legend("Views", Theme.of(context).colorScheme.primary.withOpacity(0.7)),
+              ]
+          ),
+          AspectRatio(
+            aspectRatio: 1.66,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final barsCount = 5;
+                  final screenWidth = 300; //ajuster en fonction de la taille réel du container
+                  final barsWidth = screenWidth / (2 * barsCount);
+                  final barsSpace = barsWidth;
+                  List<double> touchedValues = [];
+                  return BarChart(
+                    BarChartData(
+                      alignment: BarChartAlignment.center,
+                      barTouchData: BarTouchData(
+                        touchTooltipData: BarTouchTooltipData(
+                          tooltipMargin: 8,
+                          getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                            String title;
+                            switch (rodIndex) {
+                              case 0:
+                                title = 'Comments';
+                                break;
+                              case 1:
+                                title = 'Likes';
+                                break;
+                              case 2:
+                                title = 'Views';
+                                break;
+                              default:
+                                title = '';
+                                break;
+                            }
+                            return BarTooltipItem(
+                              '$title : ${rod.toY.round()}',
+                              TextStyle(color: Colors.white),
+                            );
+                          },
+                        ),
+                      ),
+                      titlesData: FlTitlesData(
+                        show: true,
+                        bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 28,
+                            getTitlesWidget: bottomTitles,
+                          ),
+                        ),
+                        leftTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 40,
+                            getTitlesWidget: leftTitles,
+                          ),
+                        ),
+                        topTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                        rightTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                      ),
+                      gridData: FlGridData(
+                        show: true,
+                        checkToShowHorizontalLine: (value) => value % 5 == 0,
+                        getDrawingHorizontalLine: (value) => FlLine(
+                          color: Theme.of(context).colorScheme.background,
+                          strokeWidth: 1,
+                        ),
+                        drawVerticalLine: false,
+                      ),
+                      borderData: FlBorderData(
+                        show: false,
+                      ),
+                      groupsSpace: barsSpace,
+                      barGroups: getData(context, barsCount, barsWidth, barsSpace),
                     ),
-                  ),
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 40,
-                      getTitlesWidget: leftTitles,
-                    ),
-                  ),
-                  topTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  rightTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                ),
-                gridData: FlGridData(
-                  show: true,
-                  checkToShowHorizontalLine: (value) => value % 10 == 0,
-                  getDrawingHorizontalLine: (value) => FlLine(
-                    color: AppColors.borderColor.withOpacity(0.1),
-                    strokeWidth: 1,
-                  ),
-                  drawVerticalLine: false,
-                ),
-                borderData: FlBorderData(
-                  show: false,
-                ),
-                groupsSpace: barsSpace,
-                barGroups: getData(barsWidth, barsSpace),
+                  );
+                },
               ),
-            );
-          },
-        ),
+            ),
+          )
+        ],
       ),
     );
   }
 
-  List<BarChartGroupData> getData(double barsWidth, double barsSpace) {
-    return [
-      BarChartGroupData(
-        x: 0,
+  List<BarChartGroupData> getData(BuildContext context, barsCount, double barsWidth, double barsSpace) {
+    if (_isLoading){
+      const CircularProgressIndicator();
+    }
+    return List.generate(barsCount, (index) {
+      final videoIndex = index + 1;
+      List<int> likes = infoChart.getLikes();
+      List<int> views = infoChart.getViews();
+      List<int> comments = infoChart.getComments();
+      final isTouched = touchedIndex == index;
+      return BarChartGroupData(
+        x: index - 1,
         barsSpace: barsSpace,
+        showingTooltipIndicators: isTouched ? [0] : [],
         barRods: [
           BarChartRodData(
-            toY: 17000000000,
+            toY:  views[index] as double,
+            color: Theme.of(context).colorScheme.background,
             rodStackItems: [
-              BarChartRodStackItem(0, 2000000000, Theme.of(context).colorScheme.surfaceTint),
-              BarChartRodStackItem(2000000000, 12000000000, Theme.of(context).colorScheme.onSurfaceVariant),
-              BarChartRodStackItem(12000000000, 17000000000, Theme.of(context).colorScheme.surfaceVariant),
-            ],
-            borderRadius: BorderRadius.zero,
-            width: barsWidth,
-          ),
-        ],
-      ),
-      BarChartGroupData(
-        x: 1,
-        barsSpace: barsSpace,
-        barRods: [
-          BarChartRodData(
-            toY: 31000000000,
-            rodStackItems: [
-              BarChartRodStackItem(0, 11000000000, Theme.of(context).colorScheme.surfaceTint),
-              BarChartRodStackItem(11000000000, 18000000000, Theme.of(context).colorScheme.onSurfaceVariant),
-              BarChartRodStackItem(18000000000, 31000000000, Theme.of(context).colorScheme.surfaceVariant),
-            ],
-            borderRadius: BorderRadius.zero,
-            width: barsWidth,
-          ),
-        ],
-      ),
-      BarChartGroupData(
-        x: 2,
-        barsSpace: barsSpace,
-        barRods: [
-          BarChartRodData(
-            toY: 34000000000,
-            rodStackItems: [
-              BarChartRodStackItem(0, 6000000000, Theme.of(context).colorScheme.surfaceTint),
-              BarChartRodStackItem(6000000000, 23000000000, Theme.of(context).colorScheme.onSurfaceVariant),
-              BarChartRodStackItem(23000000000, 34000000000, Theme.of(context).colorScheme.surfaceVariant),
-            ],
-            borderRadius: BorderRadius.zero,
-            width: barsWidth,
-          ),
+              BarChartRodStackItem(0, comments[index] as double, Theme.of(context).colorScheme.primary,
+                BorderSide(
+                  color: Colors.white,
+                  width: isTouched ? 2 : 0,
+                ),),
+              BarChartRodStackItem(comments[index] as double , likes[index] as double , Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                BorderSide(
+                  color: Colors.white,
+                  width: isTouched ? 2 : 0,
+                ),),
+              BarChartRodStackItem(likes[index] as double , views[index] as double , Theme.of(context).colorScheme.primary.withOpacity(0.8),
+                BorderSide(
+                  color: Colors.white,
+                  width: isTouched ? 2 : 0,
+                ),),
 
-        ],
-      ),
-      BarChartGroupData(
-        x: 3,
-        barsSpace: barsSpace,
-        barRods: [
-          BarChartRodData(
-            toY: 14000000000,
-            rodStackItems: [
-              BarChartRodStackItem(0, 1000000000.5, Theme.of(context).colorScheme.surfaceTint),
-              BarChartRodStackItem(1000000000.5, 12000000000, Theme.of(context).colorScheme.onSurfaceVariant),
-              BarChartRodStackItem(12000000000, 14000000000, Theme.of(context).colorScheme.surfaceVariant),
             ],
-            borderRadius: BorderRadius.zero,
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10)
+            ),
             width: barsWidth,
           ),
         ],
-      ),
-      BarChartGroupData(
-        x: 4,
-        barsSpace: barsSpace,
-        barRods: [
-          BarChartRodData(
-            toY: 14000000000,
-            rodStackItems: [
-              BarChartRodStackItem(0, 1000000000.5, Theme.of(context).colorScheme.surfaceTint),
-              BarChartRodStackItem(1000000000.5, 12000000000, Theme.of(context).colorScheme.onSurfaceVariant),
-              BarChartRodStackItem(12000000000, 14000000000, Theme.of(context).colorScheme.surfaceVariant),
-            ],
-            borderRadius: BorderRadius.zero,
-            width: barsWidth,
-          ),
-        ],
-      ),
-    ];
+      );
+    });
   }
-}
-
-
-
-class AppDimens {
-  static const double menuMaxNeededWidth = 304;
-  static const double menuRowHeight = 74;
-  static const double menuIconSize = 32;
-  static const double menuDocumentationIconSize = 44;
-  static const double menuTextSize = 20;
-
-  static const double chartBoxMinWidth = 350;
-
-  static const double defaultRadius = 8;
-  static const double chartSamplesSpace = 32.0;
-  static const double chartSamplesMinWidth = 350;
-}
-
-
-class AppColors {
-  static const Color primary = contentColorCyan;
-  static const Color menuBackground = Color(0xFF090912);
-  static const Color itemsBackground = Color(0xFF1B2339);
-  static const Color pageBackground = Color(0xFF282E45);
-  static const Color mainTextColor1 = Colors.white;
-  static const Color mainTextColor2 = Colors.white70;
-  static const Color mainTextColor3 = Colors.white38;
-  static const Color mainGridLineColor = Colors.white10;
-  static const Color borderColor = Colors.white54;
-  static const Color gridLinesColor = Color(0x11FFFFFF);
-
-  static const Color contentColorBlack = Colors.black;
-  static const Color contentColorWhite = Colors.white;
-  static const Color contentColorBlue = Color(0xFF2196F3);
-  static const Color contentColorYellow = Color(0xFFFFC300);
-  static const Color contentColorOrange = Color(0xFFFF683B);
-  static const Color contentColorGreen = Color(0xFF3BFF49);
-  static const Color contentColorPurple = Color(0xFF6E1BFF);
-  static const Color contentColorPink = Color(0xFFFF3AF2);
-  static const Color contentColorRed = Color(0xFFE80054);
-  static const Color contentColorCyan = Color(0xFF50E4FF);
 }
