@@ -54,7 +54,7 @@ class CreatorCard extends StatelessWidget {
                     elevation: 4.0,
                     color: backgroundColor.withOpacity(0.7),
                     child: Container(
-                      width: 450,
+                      width: 440,
                       height: 160,
                       margin: const EdgeInsets.all(10.0),
                       child: Row(
@@ -62,7 +62,7 @@ class CreatorCard extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             backgroundColor: Colors.transparent,
-                            radius: 80.0,
+                            radius: 75.0,
                             child: ClipOval(
                               child: Image.network(
                                 imageUrl,
@@ -131,12 +131,12 @@ class CreatorCard extends StatelessWidget {
             ),
           ),
 
-          SizedBox(height: 4),
+          SizedBox(height: 10),
           Padding(
-            padding: const EdgeInsets.only(bottom: 10.0),
+            padding: const EdgeInsets.only(bottom: 2.0),
             child: SizedBox(
-              width: 490,
-              height: 294,
+              width: 492,
+              height: 305,
               child: Card(
                 elevation: 4.0,
                 color: backgroundColor.withOpacity(0.7),
@@ -189,7 +189,7 @@ class CreatorCard extends StatelessWidget {
                         color: backgroundColor.withOpacity(0.7),
                         child: SizedBox(
                           width: double.infinity,
-                          height: 88,
+                          height: 100,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
@@ -240,7 +240,7 @@ class SocialMediaIcons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> socialButtons = [];
-    socialButtons.add(SizedBox(width: 10));
+    socialButtons.add(SizedBox(width: 40));
 
     if (youtubeLink != "None") {
       socialButtons.add(_buildSocialImageButton('../../assets/youtube.png', youtubeLink!));
