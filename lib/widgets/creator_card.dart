@@ -54,7 +54,7 @@ class CreatorCard extends StatelessWidget {
                     elevation: 4.0,
                     color: backgroundColor.withOpacity(0.7),
                     child: Container(
-                      width: 440,
+                      width: 460,
                       height: 160,
                       margin: const EdgeInsets.all(10.0),
                       child: Row(
@@ -62,13 +62,13 @@ class CreatorCard extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             backgroundColor: Colors.transparent,
-                            radius: 75.0,
+                            radius: 80.0,
                             child: ClipOval(
                               child: Image.network(
                                 imageUrl,
                                 fit: BoxFit.cover,
-                                width: 160.0,
-                                height: 160.0,
+                                width: 150.0,
+                                height: 150.0,
                               ),
                             ),
                           ),
@@ -133,10 +133,10 @@ class CreatorCard extends StatelessWidget {
 
           SizedBox(height: 10),
           Padding(
-            padding: const EdgeInsets.only(bottom: 2.0),
+            padding: const EdgeInsets.only(bottom: 8.0),
             child: SizedBox(
-              width: 492,
-              height: 305,
+              width: 510,
+              height: 328,
               child: Card(
                 elevation: 4.0,
                 color: backgroundColor.withOpacity(0.7),
@@ -151,7 +151,7 @@ class CreatorCard extends StatelessWidget {
                         elevation: 2.0,
                         color: backgroundColor.withOpacity(0.7),
                         child: SizedBox(
-                          width: double.infinity,
+                          width: 510,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: _buildText(
@@ -164,7 +164,7 @@ class CreatorCard extends StatelessWidget {
                         elevation: 2.0,
                         color: backgroundColor.withOpacity(0.7),
                         child: SizedBox(
-                          width: double.infinity,
+                          width: 510,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: _buildText("$views Vues", textColor),
@@ -176,7 +176,7 @@ class CreatorCard extends StatelessWidget {
                         elevation: 2.0,
                         color: backgroundColor.withOpacity(0.7),
                         child: SizedBox(
-                          width: double.infinity,
+                          width: 510,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: _buildText("$videos Vidéos", textColor),
@@ -188,8 +188,8 @@ class CreatorCard extends StatelessWidget {
                         elevation: 2.0,
                         color: backgroundColor.withOpacity(0.7),
                         child: SizedBox(
-                          width: double.infinity,
-                          height: 100,
+                          width: 510,
+                          height: 122,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
@@ -240,7 +240,7 @@ class SocialMediaIcons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> socialButtons = [];
-    socialButtons.add(SizedBox(width: 40));
+    socialButtons.add(SizedBox(width: 60));
 
     if (youtubeLink != "None") {
       socialButtons.add(_buildSocialImageButton('../../assets/youtube.png', youtubeLink!));

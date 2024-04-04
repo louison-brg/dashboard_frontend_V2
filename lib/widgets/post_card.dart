@@ -20,8 +20,9 @@ class PostCard extends StatelessWidget {
             children: [
               Image.network(
                 postInfo.postPicture,
-                fit: BoxFit.cover, // Ajustement de l'image pour qu'elle couvre la zone tout en préservant son aspect
-                height: 120, // Hauteur fixe pour l'image dans la carte
+                fit: BoxFit.cover,
+                width: 250.0,
+                height: 160.0,
               ),
               Expanded(
                 flex: 3,

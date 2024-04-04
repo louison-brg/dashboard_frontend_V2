@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 
-const rowDivider = SizedBox(width: 20);
 const colDivider = SizedBox(height: 10);
-const tinySpacing = 3.0;
 const smallSpacing = 10.0;
-const double cardWidth = 115;
-const double widthConstraint = 480;
 
 class ComponentDecoration extends StatefulWidget {
   const ComponentDecoration({
@@ -31,14 +25,11 @@ class _ComponentDecorationState extends State<ComponentDecoration> {
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: smallSpacing),
+        padding: const EdgeInsets.only(top: 10.0, left: 10.0, bottom: 8.0, right: 10.0),
         child: Column(
           children: [
             ConstrainedBox(
-              constraints:
-                  const BoxConstraints.tightFor(width: widthConstraint),
-              // Tapping within the a component card should request focus
-              // for that component's children.
+              constraints: const BoxConstraints(maxWidth: 510),
               child: Focus(
                 focusNode: focusNode,
                 canRequestFocus: true,
@@ -57,9 +48,7 @@ class _ComponentDecorationState extends State<ComponentDecoration> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(5.0),
-                      child: Center(
-                        child: widget.child,
-                      ),
+                      child: widget.child,
                     ),
                   ),
                 ),
@@ -73,8 +62,7 @@ class _ComponentDecorationState extends State<ComponentDecoration> {
 }
 
 class ComponentGroupDecoration extends StatelessWidget {
-  const ComponentGroupDecoration(
-      {super.key, required this.label, required this.children});
+  const ComponentGroupDecoration({super.key, required this.label, required this.children});
 
   final String label;
   final List<Widget> children;
@@ -86,17 +74,12 @@ class ComponentGroupDecoration extends StatelessWidget {
       child: Card(
         elevation: 0,
         color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
-        child: Padding(
-          padding: const EdgeInsets.only(top:10.0),
-          child: Center(
-            child: Column(
-              children: [
-                Text(label, style: Theme.of(context).textTheme.titleLarge),
-                colDivider,
-                ...children
-              ],
-            ),
-          ),
+        child: Column(
+          children: [
+            Text(label, style: Theme.of(context).textTheme.titleLarge),
+            colDivider,
+            ...children
+          ],
         ),
       ),
     );
@@ -106,7 +89,7 @@ class ComponentGroupDecoration extends StatelessWidget {
 class TextFields extends StatefulWidget {
   final Function(String) onSearch;
 
-  const TextFields({super.key, required this.onSearch});
+  const TextFields({Key? key, required this.onSearch}) : super(key: key);
 
   @override
   State<TextFields> createState() => _TextFieldsState();
@@ -117,37 +100,42 @@ class _TextFieldsState extends State<TextFields> {
 
   @override
   Widget build(BuildContext context) {
-    return ComponentDecoration(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(smallSpacing),
-            child: TextField(
-              controller: _controllerFilled,
-              onSubmitted: (value) {
-                widget.onSearch(value);
-              },
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
-                labelText: 'Select a Youtuber',
-                filled: true,
-                contentPadding: const EdgeInsets.all(5.0),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
+    return Align(
+      alignment: Alignment.topLeft, // Aligner le contenu à gauche
+      child: ComponentDecoration(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(smallSpacing),
+              child: TextField(
+                controller: _controllerFilled,
+                onSubmitted: (value) {
+                  widget.onSearch(value);
+                },
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.search),
+                  labelText: 'Sélectionnez un Youtuber',
+                  filled: true,
+                  contentPadding: const EdgeInsets.all(5.0),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(
                       color: Theme.of(context).colorScheme.onPrimary,
-                      width: 2.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer),
+                      width: 2.0,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

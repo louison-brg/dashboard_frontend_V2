@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_front/screens/creator_dashboard.dart';
-import 'package:palette_generator/palette_generator.dart';
-import 'screens/creator_dashboard.dart';
-import 'models/creator_info.dart';
-import 'services/youtube_api_service.dart';
-import 'widgets/creator_card.dart';
-
 
 void main() {
   runApp(MyApp());
