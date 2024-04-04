@@ -13,6 +13,7 @@ class CreatorInfo {
   final String tiktokLink; // Lien TikTok
   final String twitterLink; // Lien Twitter
 
+
   CreatorInfo({
     required this.channelDateOfCreation,
     required this.channelName,

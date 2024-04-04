@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:my_front/models/view_info.dart';
 import '../models/creator_info.dart';
 import '../models/post_info.dart';
 import '../services/youtube_api_service.dart';
 import 'package:palette_generator/palette_generator.dart';
 import '../widgets/creator_card.dart';
 import '../widgets/search_bar.dart';
+import '../widgets/view_chart.dart';
 import '../widgets/post_card.dart';
 
 class CreatorDashboard extends StatefulWidget {
@@ -16,8 +18,9 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
   final YoutubeApiService _apiService = YoutubeApiService();
   final TextEditingController _controller = TextEditingController();
   CreatorInfo? _creatorInfo;
+  InfoChart? _infoChart;
+  ColorScheme? colorScheme;
   List<PostInfo> _latestPosts = [];
-  PaletteGenerator? _paletteGenerator;
 
   void _fetchCreatorAndLatestPosts(String channelName) async {
     try {
@@ -48,11 +51,12 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
   }
 
   void _updatePaletteGenerator(String imageUrl) async {
-    final PaletteGenerator generator = await PaletteGenerator.fromImageProvider(
-      NetworkImage(imageUrl),
+    final ColorScheme newcolorScheme = await ColorScheme.fromImageProvider(provider: NetworkImage(imageUrl),
+      // ... Other properties
+
     );
     setState(() {
-      _paletteGenerator = generator;
+      colorScheme = newcolorScheme;
     });
   }
 
@@ -60,8 +64,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: _paletteGenerator?.dominantColor?.color ??
-            Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.background,
         title: const Text(
           'YouTube Creator Dashboard',
           style: TextStyle(color: Colors.white),
@@ -93,9 +96,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                           instagramLink: _creatorInfo!.instagramLink,
                           tiktokLink: _creatorInfo!.tiktokLink,
                           twitterLink: _creatorInfo!.twitterLink,
-                          backgroundColor: (_paletteGenerator?.dominantColor?.color ??
-                              Theme.of(context).cardColor)
-                              .withOpacity(0.7),
+                          backgroundColor: Theme.of(context).colorScheme.background,
                         ),
                       ),
                   ],
@@ -109,6 +110,20 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                   },
                 ),
               ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                        padding: EdgeInsets.all(16.0)
+                    ),
+                    if (_creatorInfo != null)
+                      ViewersChart(
+                        baseColor: Theme.of(context).colorScheme.onPrimary,
+                        chartInfo: InfoChart(_creatorInfo!.channelName),
+                          ),
+                  ],
+                )
             ],
           ),
         ),

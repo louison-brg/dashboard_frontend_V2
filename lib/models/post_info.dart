@@ -7,6 +7,7 @@ class PostInfo {
   final String postComments;
   final String postDuration;
 
+
   PostInfo({
     required this.postDate,
     required this.postTitle,
@@ -27,3 +28,4 @@ class PostInfo {
         postComments = json['postComments']?.toString() ?? '0',
         postDuration = json['postDuration'] ?? '';
 }
+
