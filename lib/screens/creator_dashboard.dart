@@ -68,9 +68,9 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
         ),
       ),
       body: Align(
-        alignment: Alignment.centerLeft,
+        alignment: Alignment.topLeft,
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1050),
+          constraints: const BoxConstraints(maxWidth: 1100),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -81,7 +81,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                       TextFields(onSearch: _fetchCreatorAndLatestPosts),
                       if (_creatorInfo != null)
                         Padding(
-                          padding: const EdgeInsets.only(left:10.0),
+                          padding: const EdgeInsets.only(left:10.0,bottom: 8.0,right: 30.0),
                           child: CreatorCard(
                             creatorName: _creatorInfo!.channelName,
                             subscribers: _creatorInfo!.subscriberCount,
@@ -100,7 +100,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                         ),
                     ],
                   ),
-              ),
+                ),
               Expanded(
                 child: ListView.builder(
                   itemCount: _latestPosts.length,
