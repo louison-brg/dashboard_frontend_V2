@@ -100,13 +100,13 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
+                    const Padding(
                         padding: EdgeInsets.all(16.0)
                     ),
-                    if (1 == 1)
+                    if (_creatorInfo != null)
                       ViewersChart(
                         baseColor: Theme.of(context).colorScheme.onPrimary,
-                        chartInfo: InfoChart("Mister V"),
+                        chartInfo: InfoChart(_creatorInfo!.channelName),
                           ),
                   ],
                 )
