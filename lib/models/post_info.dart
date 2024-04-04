@@ -1,4 +1,3 @@
-
 class PostInfo {
   final String postDate;
   final String postTitle;
@@ -7,6 +6,7 @@ class PostInfo {
   final String postLikes;
   final String postComments;
   final String postDuration;
+
 
   PostInfo({
     required this.postDate,
@@ -18,15 +18,14 @@ class PostInfo {
     required this.postDuration,
   });
 
-  factory PostInfo.fromJson(Map<String, dynamic> json) {
-    return PostInfo(
-      postDate: json['postDate'],
-      postTitle: json['postTitle'],
-      postPicture: json['postPicture'] as String,
-      postViews: json['postViews'].toString(),
-      postLikes: json['postLikes'].toString(),
-      postComments: json['postComments'].toString(),
-      postDuration: json['postDuration'],
-    );
-  }
+  // Remarque: il n'est pas nécessaire d'utiliser 'factory' pour un constructeur de classe
+  PostInfo.fromJson(Map<String, dynamic> json)
+      : postDate = json['postDate'] ?? '',
+        postTitle = json['postTitle'] ?? '',
+        postPicture = json['postPicture'] ?? '',
+        postViews = json['postViews']?.toString() ?? '0',
+        postLikes = json['postLikes']?.toString() ?? '0',
+        postComments = json['postComments']?.toString() ?? '0',
+        postDuration = json['postDuration'] ?? '';
 }
+

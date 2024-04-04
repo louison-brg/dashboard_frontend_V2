@@ -7,6 +7,11 @@ class CreatorInfo {
   final String viewCount;
   final String subscriberCount;
   final String videoCount;
+  final String youtubeLink; // Lien YouTube
+  final String instagramLink; // Lien Instagram
+  final String facebookLink; // Lien Facebook
+  final String tiktokLink; // Lien TikTok
+  final String twitterLink; // Lien Twitter
 
 
   CreatorInfo({
@@ -18,7 +23,11 @@ class CreatorInfo {
     required this.viewCount,
     required this.subscriberCount,
     required this.videoCount,
-
+    required this.youtubeLink, // Ajout des liens sociaux
+    required this.instagramLink,
+    required this.facebookLink,
+    required this.tiktokLink,
+    required this.twitterLink,
   });
 
   factory CreatorInfo.fromJson(Map<String, dynamic> json) {
@@ -31,7 +40,11 @@ class CreatorInfo {
       viewCount: json['viewCount']?.toString() ?? '0',
       subscriberCount: json['subscriberCount']?.toString() ?? '0',
       videoCount: json['videoCount']?.toString() ?? '0',
-
+      youtubeLink: json['youtube'] ?? '', // Récupération des liens sociaux
+      instagramLink: json['instagram'] ?? '',
+      facebookLink: json['facebook'] ?? '',
+      tiktokLink: json['tiktok'] ?? '',
+      twitterLink: json['twitter'] ?? '',
     );
   }
 }
