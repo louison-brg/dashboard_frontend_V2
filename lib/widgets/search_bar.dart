@@ -7,7 +7,7 @@ const colDivider = SizedBox(height: 10);
 const tinySpacing = 3.0;
 const smallSpacing = 10.0;
 const double cardWidth = 115;
-const double widthConstraint = 450;
+const double widthConstraint = 480;
 
 class ComponentDecoration extends StatefulWidget {
   const ComponentDecoration({
@@ -56,8 +56,7 @@ class _ComponentDecorationState extends State<ComponentDecoration> {
                       borderRadius: const BorderRadius.all(Radius.circular(12)),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5.0, vertical: 10.0),
+                      padding: const EdgeInsets.all(5.0),
                       child: Center(
                         child: widget.child,
                       ),
@@ -85,11 +84,10 @@ class ComponentGroupDecoration extends StatelessWidget {
     // Fully traverse this component group before moving on
     return FocusTraversalGroup(
       child: Card(
-        margin: EdgeInsets.zero,
         elevation: 0,
         color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20.0),
+          padding: const EdgeInsets.only(top:10.0),
           child: Center(
             child: Column(
               children: [
@@ -134,8 +132,7 @@ class _TextFieldsState extends State<TextFields> {
                 prefixIcon: const Icon(Icons.search),
                 labelText: 'Select a Youtuber',
                 filled: true,
-                contentPadding: const EdgeInsets.symmetric(
-                    vertical: 15.0, horizontal: 15.0),
+                contentPadding: const EdgeInsets.all(5.0),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                   borderSide: BorderSide(
