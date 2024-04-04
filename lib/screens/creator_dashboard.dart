@@ -124,6 +124,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                           ),
                   ],
                 )
+              )
             ],
           ),
         ),
