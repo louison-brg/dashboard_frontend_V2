@@ -8,6 +8,7 @@ class PostInfo {
   final String postComments;
   final String postDuration;
 
+
   PostInfo({
     required this.videoId,
     required this.postDate,
@@ -30,3 +31,4 @@ class PostInfo {
         postComments = json['postComments']?.toString() ?? '0',
         postDuration = json['postDuration'] ?? '';
 }
+
