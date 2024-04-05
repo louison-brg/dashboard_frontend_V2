@@ -1,4 +1,5 @@
 class PostInfo {
+  final String videoId;
   final String postDate;
   final String postTitle;
   final String postPicture;
@@ -8,6 +9,7 @@ class PostInfo {
   final String postDuration;
 
   PostInfo({
+    required this.videoId,
     required this.postDate,
     required this.postTitle,
     required this.postPicture,
@@ -19,7 +21,8 @@ class PostInfo {
 
   // Remarque: il n'est pas nécessaire d'utiliser 'factory' pour un constructeur de classe
   PostInfo.fromJson(Map<String, dynamic> json)
-      : postDate = json['postDate'] ?? '',
+      : videoId = json['videoId'] ?? '',
+        postDate = json['postDate'] ?? '',
         postTitle = json['postTitle'] ?? '',
         postPicture = json['postPicture'] ?? '',
         postViews = json['postViews']?.toString() ?? '0',

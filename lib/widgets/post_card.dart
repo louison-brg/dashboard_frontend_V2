@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/post_info.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PostCard extends StatefulWidget {
   final PostInfo postInfo;
@@ -13,9 +14,25 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   double _elevation = 4.0;
 
+  void _launchURL() async {
+    final url = Uri.parse('https://www.youtube.com/watch?v=${widget.postInfo.videoId}');
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Could not launch $url'),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
+    return Padding(
+        padding: const EdgeInsets.only(top: 18),
+    child: GestureDetector(
+    onTap: _launchURL,
+    child: MouseRegion(
+      cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _elevation = 20.0),
       onExit: (_) => setState(() => _elevation = 4.0),
       child: AnimatedPhysicalModel(
@@ -94,6 +111,8 @@ class _PostCardState extends State<PostCard> {
           ),
         ),
       ),
+    ),
+    ),
     );
   }
 }
