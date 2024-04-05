@@ -22,18 +22,19 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
   CreatorInfo? _creatorInfo;
   InfoChart? _infoChart;
   List<PostInfo> _latestPosts = [];
-  late ColorScheme  currentColorScheme;
+  late ColorScheme currentColorScheme;
   late bool isLoading;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     currentColorScheme = colorSchemeSeed;
-    isLoading=false;
+    isLoading = false;
   }
 
   Future<void> _updateImage(String provider) async {
-    final ColorScheme newColorScheme = await ColorScheme.fromImageProvider(provider: NetworkImage(_creatorInfo!.channelProfilePicLink));
+    final ColorScheme newColorScheme =
+    await ColorScheme.fromImageProvider(provider: NetworkImage(_creatorInfo!.channelProfilePicLink));
     setState(() {
       currentColorScheme = newColorScheme;
     });
@@ -45,12 +46,11 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
       final channelId = channelInfo.channelId;
       final posts = await _apiService.fetchLatestPosts(channelId);
 
-          setState(() {
+      setState(() {
         _creatorInfo = channelInfo;
         _latestPosts = posts;
-        isLoading= true;
-
-          });
+        isLoading = true;
+      });
       if (_creatorInfo != null) {
         _updateImage(_creatorInfo!.channelProfilePicLink);
       }
@@ -74,7 +74,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
 
   @override
   Widget build(BuildContext context) {
-      final ColorScheme colorScheme = currentColorScheme;
+    final ColorScheme colorScheme = currentColorScheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -85,80 +85,69 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
         ),
       ),
       body: Align(
-          alignment: Alignment.topLeft,
-        //child: isLoading
-          //? const LinearProgressIndicator()
-          child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    TextFields(onSearch: _fetchCreatorAndLatestPosts),
-                    if (_creatorInfo != null)
-                      Padding(
-                        padding: const EdgeInsets.only(left:10.0,bottom: 10.0,right: 30.0),
-                        child: CreatorCard(
-                          creatorName: _creatorInfo!.channelName,
-                          subscribers: _creatorInfo!.subscriberCount,
-                          views: _creatorInfo!.viewCount,
-                          videos: _creatorInfo!.videoCount,
-                          description: _creatorInfo!.channelDescription,
-                          imageUrl: _creatorInfo!.channelProfilePicLink,
-                          youtubeLink: _creatorInfo!.youtubeLink,
-                          instagramLink: _creatorInfo!.instagramLink,
-                          tiktokLink: _creatorInfo!.tiktokLink,
-                          twitterLink: _creatorInfo!.twitterLink,
-                          backgroundColor: Theme.of(context).colorScheme.background,
-                        ),
+        alignment: Alignment.topLeft,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextFields(onSearch: _fetchCreatorAndLatestPosts),
+                  if (_creatorInfo != null)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10.0, bottom: 10.0, right: 10.0),
+                      child: CreatorCard(
+                        creatorName: _creatorInfo!.channelName,
+                        subscribers: _creatorInfo!.subscriberCount,
+                        views: _creatorInfo!.viewCount,
+                        videos: _creatorInfo!.videoCount,
+                        description: _creatorInfo!.channelDescription,
+                        imageUrl: _creatorInfo!.channelProfilePicLink,
+                        youtubeLink: _creatorInfo!.youtubeLink,
+                        instagramLink: _creatorInfo!.instagramLink,
+                        tiktokLink: _creatorInfo!.tiktokLink,
+                        twitterLink: _creatorInfo!.twitterLink,
+                        backgroundColor: Theme.of(context).colorScheme.background,
                       ),
-                  ],
-                ),
-              ),
-        Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top:14,bottom: 10),
-                  child: ListView.builder(
-                    itemCount: _latestPosts.length,
-                    itemBuilder: (context, index) {
-                      final bool isLastItem = index == _latestPosts.length - 1;
-                      // Ajoute un Padding de 20 pixels entre chaque élément, sauf pour le dernier
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          bottom: index == 4 ? 0 : 22,
-                        ),
-                        child: PostCard(postInfo: _latestPosts[index]),
-                      );
-                    },
-                  ),
-                ),
-              ),
-        Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(
-                        padding: EdgeInsets.all(16.0)
                     ),
-                    if (_creatorInfo != null)
-                      ViewersChart(
-                        baseColor: Theme.of(context).colorScheme.onPrimary,
-                        chartInfo: InfoChart(_creatorInfo!.channelName),
-                          ),
-                  ],
-                )
-              )
-            ],
-          ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 14, bottom: 10,right: 10),
+                child: ListView.builder(
+                  itemCount: _latestPosts.length,
+                  itemBuilder: (context, index) {
+                    final bool isLastItem = index == _latestPosts.length - 1;
+                    // Ajoute un Padding de 20 pixels entre chaque élément, sauf pour le dernier
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        bottom: index == 4 ? 0 : 22,
+                      ),
+                      child: PostCard(postInfo: _latestPosts[index]),
+                    );
+                  },
+                ),
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(padding: EdgeInsets.all(16.0)),
+                  if (_creatorInfo != null)
+                    ViewersChart(
+                      baseColor: Theme.of(context).colorScheme.onPrimary,
+                      chartInfo: InfoChart(_creatorInfo!.channelName),
+                    ),
+                ],
+              ),
+            )
+          ],
         ),
+      ),
     );
   }
 }
-
-
