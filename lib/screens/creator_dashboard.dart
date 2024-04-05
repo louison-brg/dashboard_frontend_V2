@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_front/models/view_info.dart';
+import '../main.dart';
 import '../models/creator_info.dart';
 import '../models/post_info.dart';
 import '../services/youtube_api_service.dart';
@@ -17,10 +18,26 @@ class CreatorDashboard extends StatefulWidget {
 class _CreatorDashboardState extends State<CreatorDashboard> {
   final YoutubeApiService _apiService = YoutubeApiService();
   final TextEditingController _controller = TextEditingController();
+  final colorSchemeSeed = ColorScheme.fromSeed(seedColor: Colors.blueAccent);
   CreatorInfo? _creatorInfo;
   InfoChart? _infoChart;
-  ColorScheme? colorScheme;
   List<PostInfo> _latestPosts = [];
+  late ColorScheme  currentColorScheme;
+  late bool isLoading;
+
+  @override
+  void initState(){
+    super.initState();
+    currentColorScheme = colorSchemeSeed;
+    isLoading=false;
+  }
+
+  Future<void> _updateImage(String provider) async {
+    final ColorScheme newColorScheme = await ColorScheme.fromImageProvider(provider: NetworkImage(_creatorInfo!.channelProfilePicLink));
+    setState(() {
+      currentColorScheme = newColorScheme;
+    });
+  }
 
   void _fetchCreatorAndLatestPosts(String channelName) async {
     try {
@@ -28,20 +45,25 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
       final channelId = channelInfo.channelId;
       final posts = await _apiService.fetchLatestPosts(channelId);
 
-      setState(() {
+          setState(() {
         _creatorInfo = channelInfo;
         _latestPosts = posts;
-      });
+        isLoading= true;
+
+          });
+      if (_creatorInfo != null) {
+        _updateImage(_creatorInfo!.channelProfilePicLink);
+      }
     } catch (e) {
       print(e);
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('Error'),
-          content: Text('Failed to fetch data. Please try again later.'),
+          title: const Text('Error'),
+          content: const Text('Failed to fetch data. Please try again later.'),
           actions: [
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ],
@@ -50,18 +72,10 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
     }
   }
 
-  void _updatePaletteGenerator(String imageUrl) async {
-    final ColorScheme newcolorScheme = await ColorScheme.fromImageProvider(provider: NetworkImage(imageUrl),
-      // ... Other properties
-
-    );
-    setState(() {
-      colorScheme = newcolorScheme;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+      final ColorScheme colorScheme = currentColorScheme;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
@@ -71,12 +85,17 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
         ),
       ),
       body: Align(
-        alignment: Alignment.topLeft,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1100),
+          alignment: Alignment.topLeft,
+        //child: isLoading
+          //? const LinearProgressIndicator()
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -102,7 +121,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                   ],
                 ),
               ),
-              Expanded(
+        Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(top:14,bottom: 10),
                   child: ListView.builder(
@@ -120,8 +139,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                   ),
                 ),
               ),
-
-              Expanded(
+        Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -139,7 +157,8 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
             ],
           ),
         ),
-      ),
     );
   }
 }
+
+
