@@ -1,28 +1,39 @@
 import 'package:flutter/material.dart';
 import '../models/post_info.dart';
 
-class PostCard extends StatelessWidget {
+class PostCard extends StatefulWidget {
   final PostInfo postInfo;
 
   const PostCard({Key? key, required this.postInfo}) : super(key: key);
 
   @override
+  _PostCardState createState() => _PostCardState();
+}
+
+class _PostCardState extends State<PostCard> {
+  double _elevation = 4.0;
+
+  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 18),
-      child: Card(
-        elevation: 4.0,
-        color: Colors.grey[200],
+    return MouseRegion(
+      onEnter: (_) => setState(() => _elevation = 20.0),
+      onExit: (_) => setState(() => _elevation = 4.0),
+      child: AnimatedPhysicalModel(
+        duration: const Duration(milliseconds: 150),
+        curve: Curves.easeInOut,
+        elevation: _elevation,
+        shape: BoxShape.rectangle,
+        shadowColor: Colors.black,
+        color: Colors.grey[200]!,
+        borderRadius: BorderRadius.circular(12), // Ajout des coins arrondis
         child: SizedBox(
-          height: 160,
+          height: 205,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Image.network(
-                postInfo.postPicture,
+                widget.postInfo.postPicture,
                 fit: BoxFit.cover,
-                width: 250.0,
-                height: 160.0,
               ),
               Expanded(
                 flex: 3,
@@ -32,36 +43,49 @@ class PostCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        postInfo.postTitle,
+                        widget.postInfo.postTitle,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 4),
+                      Spacer(), // Pour pousser les icônes en haut
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.remove_red_eye),
+                              const SizedBox(width: 4),
+                              Text(widget.postInfo.postViews),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Icon(Icons.thumb_up),
+                              const SizedBox(width: 4),
+                              Text(widget.postInfo.postLikes),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Icon(Icons.comment),
+                              const SizedBox(width: 4),
+                              Text(widget.postInfo.postComments),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20), // Espacement entre les icônes et la date
                       Text(
-                        postInfo.postDate,
+                        widget.postInfo.postDate,
                         style: const TextStyle(
                           fontSize: 14,
                           color: Colors.grey,
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          const Icon(Icons.remove_red_eye),
-                          const SizedBox(width: 4),
-                          Text(postInfo.postViews),
-                          const SizedBox(width: 16),
-                          const Icon(Icons.thumb_up),
-                          const SizedBox(width: 4),
-                          Text(postInfo.postLikes),
-                          const SizedBox(width: 16),
-                          const Icon(Icons.comment),
-                          const SizedBox(width: 4),
-                          Text(postInfo.postComments),
-                        ],
-                      ),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),

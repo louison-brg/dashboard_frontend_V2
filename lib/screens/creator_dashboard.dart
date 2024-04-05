@@ -81,7 +81,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                     TextFields(onSearch: _fetchCreatorAndLatestPosts),
                     if (_creatorInfo != null)
                       Padding(
-                        padding: const EdgeInsets.only(left:10.0,bottom: 8.0,right: 30.0),
+                        padding: const EdgeInsets.only(left:10.0,bottom: 10.0,right: 30.0),
                         child: CreatorCard(
                           creatorName: _creatorInfo!.channelName,
                           subscribers: _creatorInfo!.subscriberCount,
@@ -102,13 +102,24 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                 ),
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: _latestPosts.length,
-                  itemBuilder: (context, index) {
-                    return PostCard(postInfo: _latestPosts[index]);
-                  },
+                child: Padding(
+                  padding: const EdgeInsets.only(top:14,bottom: 10),
+                  child: ListView.builder(
+                    itemCount: _latestPosts.length,
+                    itemBuilder: (context, index) {
+                      final bool isLastItem = index == _latestPosts.length - 1;
+                      // Ajoute un Padding de 20 pixels entre chaque élément, sauf pour le dernier
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          bottom: index == 4 ? 0 : 22,
+                        ),
+                        child: PostCard(postInfo: _latestPosts[index]),
+                      );
+                    },
+                  ),
                 ),
               ),
+
             ],
           ),
         ),
