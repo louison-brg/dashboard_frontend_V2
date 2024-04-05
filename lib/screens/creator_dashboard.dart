@@ -86,9 +86,9 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
       ),
       body: Align(
           alignment: Alignment.topLeft,
-        child: isLoading
-          ? const LinearProgressIndicator()
-          : Row(
+        //child: isLoading
+          //? const LinearProgressIndicator()
+          child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
