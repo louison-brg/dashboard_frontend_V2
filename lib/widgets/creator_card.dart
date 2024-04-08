@@ -67,8 +67,6 @@ class CreatorCard extends StatelessWidget {
                               child: Image.network(
                                 imageUrl,
                                 fit: BoxFit.cover,
-                                width: 150.0,
-                                height: 150.0,
                               ),
                             ),
                           ),
@@ -86,7 +84,7 @@ class CreatorCard extends StatelessWidget {
                                         creatorName,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                          fontSize: 24,
+                                          fontSize: 30,
                                           fontWeight: FontWeight.bold,
                                           color: textColor,
                                         ),
@@ -98,7 +96,7 @@ class CreatorCard extends StatelessWidget {
                                             creatorName,
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
-                                              fontSize: 24,
+                                              fontSize: 40,
                                               fontWeight: FontWeight.bold,
                                               color: textColor,
                                             ),
@@ -132,76 +130,72 @@ class CreatorCard extends StatelessWidget {
           ),
 
           SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: SizedBox(
-              width: 510,
-              height: 328,
-              child: Card(
-                elevation: 4.0,
-                color: backgroundColor.withOpacity(0.7),
-                // Réduit l'opacité de la couleur de fond
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      //SizedBox(height: 5),
-                      Card(
-                        elevation: 2.0,
-                        color: backgroundColor.withOpacity(0.7),
-                        child: SizedBox(
-                          width: 510,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: _buildText(
-                                "$subscribers Abonnés", textColor),
+          SizedBox(
+            width: 510,
+            height: 350,
+            child: Card(
+              elevation: 4.0,
+              color: backgroundColor.withOpacity(0.7),
+              // Réduit l'opacité de la couleur de fond
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    //SizedBox(height: 5),
+                    Card(
+                      elevation: 2.0,
+                      color: backgroundColor.withOpacity(0.7),
+                      child: SizedBox(
+                        width: 510,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: _buildText("$subscribers Abonnés", textColor),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Card(
+                      elevation: 2.0,
+                      color: backgroundColor.withOpacity(0.7),
+                      child: SizedBox(
+                        width: 510,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: _buildText("$views Vues", textColor),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Card(
+                      elevation: 2.0,
+                      color: backgroundColor.withOpacity(0.7),
+                      child: SizedBox(
+                        width: 510,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: _buildText("$videos Vidéos", textColor),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Card(
+                      elevation: 2.0,
+                      color: backgroundColor.withOpacity(0.7),
+                      child: SizedBox(
+                        width: 510,
+                        height: 145,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            description,
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(fontSize: 14, color: textColor),
                           ),
                         ),
                       ),
-                      SizedBox(height: 5),
-                      Card(
-                        elevation: 2.0,
-                        color: backgroundColor.withOpacity(0.7),
-                        child: SizedBox(
-                          width: 510,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: _buildText("$views Vues", textColor),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Card(
-                        elevation: 2.0,
-                        color: backgroundColor.withOpacity(0.7),
-                        child: SizedBox(
-                          width: 510,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: _buildText("$videos Vidéos", textColor),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Card(
-                        elevation: 2.0,
-                        color: backgroundColor.withOpacity(0.7),
-                        child: SizedBox(
-                          width: 510,
-                          height: 122,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              description,
-                              textAlign: TextAlign.justify,
-                              style: TextStyle(fontSize: 14, color: textColor),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -240,7 +234,7 @@ class SocialMediaIcons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> socialButtons = [];
-    socialButtons.add(SizedBox(width: 60));
+    socialButtons.add(SizedBox(width: 70));
 
     if (youtubeLink != "None") {
       socialButtons.add(_buildSocialImageButton('../../assets/youtube.png', youtubeLink!));

@@ -96,35 +96,50 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              TextFields(onSearch: _fetchCreatorAndLatestPosts),
-              if (_creatorInfo != null)
-                Padding(
-                  padding: const EdgeInsets.only(left:10.0,bottom: 8.0,right: 30.0),
-                  child: CreatorCard(
-                    creatorName: _creatorInfo!.channelName,
-                    subscribers: _creatorInfo!.subscriberCount,
-                    views: _creatorInfo!.viewCount,
-                    videos: _creatorInfo!.videoCount,
-                    description: _creatorInfo!.channelDescription,
-                    imageUrl: _creatorInfo!.channelProfilePicLink,
-                    youtubeLink: _creatorInfo!.youtubeLink,
-                    instagramLink: _creatorInfo!.instagramLink,
-                    tiktokLink: _creatorInfo!.tiktokLink,
-                    twitterLink: _creatorInfo!.twitterLink,
-                    backgroundColor: Theme.of(context).colorScheme.background,
+
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TextFields(onSearch: _fetchCreatorAndLatestPosts),
+                    if (_creatorInfo != null)
+                      Padding(
+                        padding: const EdgeInsets.only(left:10.0,bottom: 10.0,right: 30.0),
+                        child: CreatorCard(
+                          creatorName: _creatorInfo!.channelName,
+                          subscribers: _creatorInfo!.subscriberCount,
+                          views: _creatorInfo!.viewCount,
+                          videos: _creatorInfo!.videoCount,
+                          description: _creatorInfo!.channelDescription,
+                          imageUrl: _creatorInfo!.channelProfilePicLink,
+                          youtubeLink: _creatorInfo!.youtubeLink,
+                          instagramLink: _creatorInfo!.instagramLink,
+                          tiktokLink: _creatorInfo!.tiktokLink,
+                          twitterLink: _creatorInfo!.twitterLink,
+                          backgroundColor: Theme.of(context).colorScheme.background,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+        Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top:14,bottom: 10),
+                  child: ListView.builder(
+                    itemCount: _latestPosts.length,
+                    itemBuilder: (context, index) {
+                      final bool isLastItem = index == _latestPosts.length - 1;
+                      // Ajoute un Padding de 20 pixels entre chaque élément, sauf pour le dernier
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          bottom: index == 4 ? 0 : 22,
+                        ),
+                        child: PostCard(postInfo: _latestPosts[index]),
+                      );
+                    },
                   ),
                 ),
-            ],
-          ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: _latestPosts.length,
-            itemBuilder: (context, index) {
-              return PostCard(postInfo: _latestPosts[index]);
-            },
-          ),
-        ),
+              ),
         Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
