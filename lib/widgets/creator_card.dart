@@ -60,13 +60,19 @@ class CreatorCard extends StatelessWidget {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CircleAvatar(
+                          Padding(padding: EdgeInsets.only(top: 20,left: 20),
+                          child: CircleAvatar(
                             backgroundColor: Colors.transparent,
-                            radius: 80.0,
+                            radius: 60.0,
                             child: ClipOval(
                               child: Image.network(
                                 imageUrl,
                                 fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  print('Error loading image: $error');
+                                  return Text('Failed to load image');
+                                },
+                              ),
                               ),
                             ),
                           ),
@@ -234,7 +240,7 @@ class SocialMediaIcons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> socialButtons = [];
-    socialButtons.add(SizedBox(width: 70));
+    socialButtons.add(SizedBox(width: 60));
 
     if (youtubeLink != "None") {
       socialButtons.add(_buildSocialImageButton('../../assets/youtube.png', youtubeLink!));

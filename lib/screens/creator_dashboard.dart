@@ -22,18 +22,19 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
   CreatorInfo? _creatorInfo;
   InfoChart? _infoChart;
   List<PostInfo> _latestPosts = [];
-  late ColorScheme  currentColorScheme;
+  late ColorScheme currentColorScheme;
   late bool isLoading;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     currentColorScheme = colorSchemeSeed;
-    isLoading=false;
+    isLoading = false;
   }
 
   Future<void> _updateImage(String provider) async {
-    final ColorScheme newColorScheme = await ColorScheme.fromImageProvider(provider: NetworkImage(_creatorInfo!.channelProfilePicLink));
+    final ColorScheme newColorScheme =
+    await ColorScheme.fromImageProvider(provider: NetworkImage(_creatorInfo!.channelProfilePicLink));
     setState(() {
       currentColorScheme = newColorScheme;
     });
@@ -52,6 +53,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
             isLoading = false;
 
           });
+
       if (_creatorInfo != null) {
         _updateImage(_creatorInfo!.channelProfilePicLink);
       }
@@ -75,7 +77,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
 
   @override
   Widget build(BuildContext context) {
-      final ColorScheme colorScheme = currentColorScheme;
+    final ColorScheme colorScheme = currentColorScheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -119,47 +121,45 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                           backgroundColor: Theme.of(context).colorScheme.background,
                         ),
                       ),
-                  ],
+                    ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 14, bottom: 10,right: 10),
+                child: ListView.builder(
+                  itemCount: _latestPosts.length,
+                  itemBuilder: (context, index) {
+                    final bool isLastItem = index == _latestPosts.length - 1;
+                    // Ajoute un Padding de 20 pixels entre chaque élément, sauf pour le dernier
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        bottom: index == 4 ? 0 : 22,
+                      ),
+                      child: PostCard(postInfo: _latestPosts[index]),
+                    );
+                  },
                 ),
               ),
-        Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top:14,bottom: 10),
-                  child: ListView.builder(
-                    itemCount: _latestPosts.length,
-                    itemBuilder: (context, index) {
-                      final bool isLastItem = index == _latestPosts.length - 1;
-                      // Ajoute un Padding de 20 pixels entre chaque élément, sauf pour le dernier
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          bottom: index == 4 ? 0 : 22,
-                        ),
-                        child: PostCard(postInfo: _latestPosts[index]),
-                      );
-                    },
-                  ),
-                ),
+
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(padding: EdgeInsets.all(16.0)),
+                  if (_creatorInfo != null)
+                    ViewersChart(
+                      baseColor: Theme.of(context).colorScheme.onPrimary,
+                      chartInfo: InfoChart(_creatorInfo!.channelName),
+                    ),
+                ],
               ),
-        Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                    padding: EdgeInsets.all(16.0)
-                ),
-                if (_creatorInfo != null)
-                  ViewersChart(
-                    baseColor: Theme.of(context).colorScheme.onPrimary,
-                    creatorName: _creatorInfo!.channelName
-                  ),
-              ],
             )
-        )
-      ],
-    ),
-    ),
+          ],
+        ),
+      ),
     );
   }
 }
-
-
