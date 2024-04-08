@@ -41,14 +41,15 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
 
   void _fetchCreatorAndLatestPosts(String channelName) async {
     try {
+      isLoading = true;
       final channelInfo = await _apiService.fetchCreatorInfo(channelName);
       final channelId = channelInfo.channelId;
       final posts = await _apiService.fetchLatestPosts(channelId);
 
           setState(() {
-        _creatorInfo = channelInfo;
-        _latestPosts = posts;
-        isLoading= true;
+            _creatorInfo = channelInfo;
+            _latestPosts = posts;
+            isLoading = false;
 
           });
       if (_creatorInfo != null) {
@@ -86,9 +87,9 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
       ),
       body: Align(
           alignment: Alignment.topLeft,
-        //child: isLoading
-          //? const LinearProgressIndicator()
-          child: Row(
+        child: isLoading
+          ? const LinearProgressIndicator()
+          : Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
@@ -134,7 +135,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                 if (_creatorInfo != null)
                   ViewersChart(
                     baseColor: Theme.of(context).colorScheme.onPrimary,
-                    chartInfo: InfoChart(_creatorInfo!.channelName),
+                    creatorName: _creatorInfo!.channelName
                   ),
               ],
             )
