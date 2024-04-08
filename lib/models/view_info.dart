@@ -43,6 +43,10 @@ class InfoChart {
     dates = creatorPosts.map((post) => post['postDate'] as String).toList();
   }
 
+  String getCreatorName(){
+    return creatorName;
+  }
+
   List<String> getTitles() {
     return titles;
   }

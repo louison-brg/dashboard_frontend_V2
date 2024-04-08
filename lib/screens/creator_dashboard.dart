@@ -42,15 +42,18 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
 
   void _fetchCreatorAndLatestPosts(String channelName) async {
     try {
+      isLoading = true;
       final channelInfo = await _apiService.fetchCreatorInfo(channelName);
       final channelId = channelInfo.channelId;
       final posts = await _apiService.fetchLatestPosts(channelId);
 
-      setState(() {
-        _creatorInfo = channelInfo;
-        _latestPosts = posts;
-        isLoading = true;
-      });
+          setState(() {
+            _creatorInfo = channelInfo;
+            _latestPosts = posts;
+            isLoading = false;
+
+          });
+
       if (_creatorInfo != null) {
         _updateImage(_creatorInfo!.channelProfilePicLink);
       }
@@ -85,30 +88,38 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
         ),
       ),
       body: Align(
-        alignment: Alignment.topLeft,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  TextFields(onSearch: _fetchCreatorAndLatestPosts),
-                  if (_creatorInfo != null)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10.0, bottom: 10.0, right: 10.0),
-                      child: CreatorCard(
-                        creatorName: _creatorInfo!.channelName,
-                        subscribers: _creatorInfo!.subscriberCount,
-                        views: _creatorInfo!.viewCount,
-                        videos: _creatorInfo!.videoCount,
-                        description: _creatorInfo!.channelDescription,
-                        imageUrl: _creatorInfo!.channelProfilePicLink,
-                        youtubeLink: _creatorInfo!.youtubeLink,
-                        instagramLink: _creatorInfo!.instagramLink,
-                        tiktokLink: _creatorInfo!.tiktokLink,
-                        twitterLink: _creatorInfo!.twitterLink,
-                        backgroundColor: Theme.of(context).colorScheme.background,
+          alignment: Alignment.topLeft,
+        child: isLoading
+          ? const LinearProgressIndicator()
+          : Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TextFields(onSearch: _fetchCreatorAndLatestPosts),
+                    if (_creatorInfo != null)
+                      Padding(
+                        padding: const EdgeInsets.only(left:10.0,bottom: 10.0,right: 30.0),
+                        child: CreatorCard(
+                          creatorName: _creatorInfo!.channelName,
+                          subscribers: _creatorInfo!.subscriberCount,
+                          views: _creatorInfo!.viewCount,
+                          videos: _creatorInfo!.videoCount,
+                          description: _creatorInfo!.channelDescription,
+                          imageUrl: _creatorInfo!.channelProfilePicLink,
+                          youtubeLink: _creatorInfo!.youtubeLink,
+                          instagramLink: _creatorInfo!.instagramLink,
+                          tiktokLink: _creatorInfo!.tiktokLink,
+                          twitterLink: _creatorInfo!.twitterLink,
+                          backgroundColor: Theme.of(context).colorScheme.background,
+                        ),
                       ),
                     ),
                 ],
@@ -131,6 +142,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                   },
                 ),
               ),
+
             ),
             Expanded(
               child: Column(

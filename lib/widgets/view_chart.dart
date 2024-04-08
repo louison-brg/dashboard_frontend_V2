@@ -5,12 +5,12 @@ import '../widgets/legend_list_widget.dart';
 
 class ViewersChart extends StatefulWidget {
   final Color baseColor;
-  final InfoChart chartInfo;
+  final String creatorName;
 
   ViewersChart({
     Key? key,
     required this.baseColor,
-    required this.chartInfo,
+    required this.creatorName,
   }) : super(key: key);
 
   @override
@@ -18,7 +18,8 @@ class ViewersChart extends StatefulWidget {
 }
 
 class ViewersChartState extends State<ViewersChart> {
-  late InfoChart infoChart = InfoChart("Mister V");
+  String get creatorName => widget.creatorName;
+  late InfoChart infoChart = InfoChart(widget.creatorName);
   bool _isLoading = true;
   Color get baseColor => widget.baseColor;
   int touchedIndex = -1;
@@ -27,9 +28,10 @@ class ViewersChartState extends State<ViewersChart> {
   void initState() {
     super.initState();
     loadData();
+    _isLoading = true;
   }
   void loadData() async {
-    await infoChart.loadJsonData("Mister V");
+    await infoChart.loadJsonData(widget.creatorName);
     setState(() {
       _isLoading = false;
     });
