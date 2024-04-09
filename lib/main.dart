@@ -14,9 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         // Define the base theme with Material 3 features
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepOrange,
-        ),
+        primarySwatch: Colors.blue,
       ),
       home: CreatorDashboard(), // Utilisez MyHomePage comme page d'accueil
     );

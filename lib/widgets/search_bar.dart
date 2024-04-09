@@ -97,6 +97,8 @@ class TextFields extends StatefulWidget {
 
 class _TextFieldsState extends State<TextFields> {
   final TextEditingController _controllerFilled = TextEditingController();
+  bool _isLoading = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +114,7 @@ class _TextFieldsState extends State<TextFields> {
                 controller: _controllerFilled,
                 onSubmitted: (value) {
                   widget.onSearch(value);
+                  _isLoading = true;
                 },
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.search),

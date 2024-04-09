@@ -121,7 +121,9 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                           backgroundColor: Theme.of(context).colorScheme.background,
                         ),
                       ),
-                    ),
+                    ]
+                  ),
+                  ),
                 ],
               ),
             ),
@@ -144,19 +146,29 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
               ),
 
             ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(padding: EdgeInsets.all(16.0)),
-                  if (_creatorInfo != null)
-                    ViewersChart(
-                      baseColor: Theme.of(context).colorScheme.onPrimary,
-                      chartInfo: InfoChart(_creatorInfo!.channelName),
-                    ),
-                ],
-              ),
-            )
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                if (_creatorInfo != null)
+                  ViewersChart1(
+                    baseColor: Theme.of(context).colorScheme.onPrimary,
+                    creatorName: _creatorInfo!.channelName,
+                  ),
+                if (_creatorInfo != null)
+                  ViewersChart2(
+                    baseColor: Theme.of(context).colorScheme.onPrimary,
+                    creatorName: _creatorInfo!.channelName,
+                  ),
+                if (_creatorInfo != null)
+                  ViewersChart3(
+                    baseColor: Theme.of(context).colorScheme.onPrimary,
+                    creatorName: _creatorInfo!.channelName,
+                  ),
+              ],
+            ),
+          ),
+        ),
           ],
         ),
       ),
