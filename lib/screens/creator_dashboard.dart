@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_front/models/view_info.dart';
+import '../animation/creator_card_animated.dart';
+import '../animation/post_card_animated.dart';
 import '../main.dart';
 import '../models/creator_info.dart';
 import '../models/post_info.dart';
@@ -11,6 +13,8 @@ import '../widgets/view_chart.dart';
 import '../widgets/post_card.dart';
 
 class CreatorDashboard extends StatefulWidget {
+  const CreatorDashboard({super.key});
+
   @override
   _CreatorDashboardState createState() => _CreatorDashboardState();
 }
@@ -34,7 +38,8 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
 
   Future<void> _updateImage(String provider) async {
     final ColorScheme newColorScheme =
-    await ColorScheme.fromImageProvider(provider: NetworkImage(_creatorInfo!.channelProfilePicLink));
+    await ColorScheme.fromImageProvider(
+        provider: NetworkImage(_creatorInfo!.channelProfilePicLink));
     setState(() {
       currentColorScheme = newColorScheme;
     });
@@ -42,21 +47,30 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
 
   void _fetchCreatorAndLatestPosts(String channelName) async {
     try {
-      isLoading = true;
+
+      // Mettre isLoading à true avant de démarrer la recherche
+      setState(() {
+        isLoading = true;
+      });
       final channelInfo = await _apiService.fetchCreatorInfo(channelName);
       final channelId = channelInfo.channelId;
       final posts = await _apiService.fetchLatestPosts(channelId);
 
-          setState(() {
-            _creatorInfo = channelInfo;
-            _latestPosts = posts;
-            isLoading = false;
+      // Mettre à jour les données et isLoading seulement après le chargement des nouvelles données
+      setState(() {
+        _creatorInfo = channelInfo;
+        _latestPosts = posts;
+      });
 
-          });
 
       if (_creatorInfo != null) {
         _updateImage(_creatorInfo!.channelProfilePicLink);
       }
+
+      // Mettre isLoading à false lorsque la recherche est terminée
+      setState(() {
+        isLoading = false;
+      });
     } catch (e) {
       print(e);
       showDialog(
@@ -72,6 +86,11 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
           ],
         ),
       );
+
+      // Mettre isLoading à false en cas d'échec de la recherche
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -88,46 +107,32 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
         ),
       ),
       body: Align(
-          alignment: Alignment.topLeft,
-        child: isLoading
-          ? const LinearProgressIndicator()
-          : Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
 
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    TextFields(onSearch: _fetchCreatorAndLatestPosts),
-                    if (_creatorInfo != null)
-                      Padding(
-                        padding: const EdgeInsets.only(left:10.0,bottom: 10.0,right: 30.0),
-                        child: CreatorCard(
-                          creatorName: _creatorInfo!.channelName,
-                          subscribers: _creatorInfo!.subscriberCount,
-                          views: _creatorInfo!.viewCount,
-                          videos: _creatorInfo!.videoCount,
-                          description: _creatorInfo!.channelDescription,
-                          imageUrl: _creatorInfo!.channelProfilePicLink,
-                          youtubeLink: _creatorInfo!.youtubeLink,
-                          instagramLink: _creatorInfo!.instagramLink,
-                          tiktokLink: _creatorInfo!.tiktokLink,
-                          twitterLink: _creatorInfo!.twitterLink,
-                          backgroundColor: Theme.of(context).colorScheme.background,
-                        ),
-                      ),
+        alignment: Alignment.topLeft,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextFields(onSearch: _fetchCreatorAndLatestPosts),
+                  if (_creatorInfo != null)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10.0, bottom: 10.0, right: 10.0),
+                      child: isLoading
+                          ? SizedBox.shrink() // Remplacer le widget par un SizedBox lorsque isLoading est true
+                          : _creatorInfo != null
+                          ? CreatorCardAnimated(creatorInfo: _creatorInfo!)
+                          : SizedBox.shrink(), // Utilisez SizedBox.shrink() pour ne pas afficher le widget si _creatorInfo est null
+
                     ),
                 ],
               ),
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(top: 14, bottom: 10,right: 10),
+                padding: const EdgeInsets.only(top: 14, bottom: 10, right: 10),
                 child: ListView.builder(
                   itemCount: _latestPosts.length,
                   itemBuilder: (context, index) {
@@ -137,7 +142,11 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                       padding: EdgeInsets.only(
                         bottom: index == 4 ? 0 : 22,
                       ),
-                      child: PostCard(postInfo: _latestPosts[index]),
+                      child: isLoading
+                          ? SizedBox.shrink()
+                          : _latestPosts[index] != null
+                          ? PostCardAnimated(postInfo: _latestPosts[index])
+                          : SizedBox.shrink(), // Utilisez SizedBox.shrink() pour ne pas afficher le widget si _latestPosts[index] est null
                     );
                   },
                 ),

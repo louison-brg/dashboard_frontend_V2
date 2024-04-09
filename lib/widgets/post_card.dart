@@ -62,7 +62,7 @@ class _PostCardState extends State<PostCard> {
                         Text(
                           widget.postInfo.postTitle,
                           style: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -83,7 +83,7 @@ class _PostCardState extends State<PostCard> {
                             ),
                             Row(
                               children: [
-                                const Icon(Icons.thumb_up, size: 18,color: Colors.blue), // Définir une taille personnalisée pour l'icône
+                                const Icon(Icons.thumb_up, size: 18, color: Colors.blue), // Définir une taille personnalisée pour l'icône
                                 const SizedBox(width: 4),
                                 Text(
                                   widget.postInfo.postLikes,
