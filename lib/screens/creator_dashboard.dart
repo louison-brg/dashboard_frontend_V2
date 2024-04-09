@@ -47,11 +47,11 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
 
   void _fetchCreatorAndLatestPosts(String channelName) async {
     try {
+
       // Mettre isLoading à true avant de démarrer la recherche
       setState(() {
         isLoading = true;
       });
-
       final channelInfo = await _apiService.fetchCreatorInfo(channelName);
       final channelId = channelInfo.channelId;
       final posts = await _apiService.fetchLatestPosts(channelId);
@@ -61,6 +61,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
         _creatorInfo = channelInfo;
         _latestPosts = posts;
       });
+
 
       if (_creatorInfo != null) {
         _updateImage(_creatorInfo!.channelProfilePicLink);
@@ -106,6 +107,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
         ),
       ),
       body: Align(
+
         alignment: Alignment.topLeft,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,6 +125,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                           : _creatorInfo != null
                           ? CreatorCardAnimated(creatorInfo: _creatorInfo!)
                           : SizedBox.shrink(), // Utilisez SizedBox.shrink() pour ne pas afficher le widget si _creatorInfo est null
+
                     ),
                 ],
               ),
@@ -148,6 +151,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                   },
                 ),
               ),
+
             ),
             Expanded(
               child: Column(
