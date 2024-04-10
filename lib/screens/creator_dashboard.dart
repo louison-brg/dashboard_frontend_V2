@@ -107,6 +107,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
           style: TextStyle(color: Colors.white),
         ),
       ),
+
       body:isLoading
           ? Center(
         // Center the loading animation in the available space
@@ -137,6 +138,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                           : SizedBox.shrink(), // Utilisez SizedBox.shrink() pour ne pas afficher le widget si _creatorInfo est null
 
                     ),
+
                 ],
               ),
             ),
@@ -163,12 +165,30 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
               ),
 
             ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-
-              ),
-            )
+            
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                if (_creatorInfo != null)
+                  ViewersChart1(
+                    baseColor: Theme.of(context).colorScheme.onPrimary,
+                    creatorName: _creatorInfo!.channelName,
+                  ),
+                if (_creatorInfo != null)
+                  ViewersChart2(
+                    baseColor: Theme.of(context).colorScheme.onPrimary,
+                    creatorName: _creatorInfo!.channelName,
+                  ),
+                if (_creatorInfo != null)
+                  ViewersChart3(
+                    baseColor: Theme.of(context).colorScheme.onPrimary,
+                    creatorName: _creatorInfo!.channelName,
+                  ),
+              ],
+            ),
+          ),
+        ),
           ],
         ),
       ),
