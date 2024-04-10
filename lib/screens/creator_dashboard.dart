@@ -11,6 +11,7 @@ import '../widgets/creator_card.dart';
 import '../widgets/search_bar.dart';
 import '../widgets/view_chart.dart';
 import '../widgets/post_card.dart';
+import 'package:lottie/lottie.dart';
 
 class CreatorDashboard extends StatefulWidget {
   const CreatorDashboard({super.key});
@@ -106,8 +107,17 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: Align(
-
+      body:isLoading
+          ? Center(
+        // Center the loading animation in the available space
+        child: Lottie.asset(
+          'loading.json', // Path to your Lottie file
+          width: 200, // Specify the size of the animation
+          height: 200,
+          fit: BoxFit.fill, // Make the animation fill the given size
+        ),
+      )
+      :Align(
         alignment: Alignment.topLeft,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,14 +166,7 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(padding: EdgeInsets.all(16.0)),
-                  if (_creatorInfo != null)
-                    ViewersChart(
-                      baseColor: Theme.of(context).colorScheme.onPrimary,
-                      chartInfo: InfoChart(_creatorInfo!.channelName),
-                    ),
-                ],
+
               ),
             )
           ],

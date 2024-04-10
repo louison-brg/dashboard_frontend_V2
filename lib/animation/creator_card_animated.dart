@@ -4,6 +4,9 @@ import 'package:url_launcher/url_launcher.dart'; // Import the url_launcher pack
 
 import '../widgets/creator_card.dart';
 import 'slide_in_animation.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+
+
 
 class CreatorCardAnimated extends StatelessWidget {
   final CreatorInfo creatorInfo;
