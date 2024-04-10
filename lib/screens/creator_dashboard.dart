@@ -100,14 +100,6 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
     final ColorScheme colorScheme = currentColorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        title: const Text(
-          'YouTube Creator Dashboard',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-
       body:isLoading
           ? Center(
         // Center the loading animation in the available space
