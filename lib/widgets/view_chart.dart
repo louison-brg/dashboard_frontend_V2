@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import '../animation/slide_in_animation.dart';
 import '../models/view_info.dart';
 import '../widgets/legend_list_widget.dart';
 
@@ -10,7 +11,7 @@ class ViewersChart1 extends StatefulWidget {
   ViewersChart1({
     Key? key,
     required this.baseColor,
-    required this.creatorName,
+    required this.creatorName, required List views, required List dates,
   }) : super(key: key);
 
   @override
@@ -29,13 +30,16 @@ class ViewersChartState extends State<ViewersChart1> {
     super.initState();
     loadData();
   }
+
   void loadData() async {
     setState(() {
-      _isLoading = true;
+      _isLoading = true; // Mettre _isLoading à true avant de charger les données
     });
+
     await infoChart.loadJsonData(widget.creatorName);
+
     setState(() {
-      _isLoading = false;
+      _isLoading = false; // Mettre _isLoading à false une fois les données chargées
     });
   }
 
@@ -86,105 +90,109 @@ class ViewersChartState extends State<ViewersChart1> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children :[
-          Text(
-              "Number of views",
+    return SlideInAnimation(
+      direction: SlideDirection.fromBottom,
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Nombre de vues",
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                 fontSize: 16,
-                fontWeight: FontWeight.bold,)
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          LegendsListWidget(
-              legends: [
-                Legend("Views", Theme.of(context).colorScheme.primary),
-              ]
-          ),
-          AspectRatio(
-            aspectRatio: 1.66,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final barsCount = 5;
-                  final screenWidth = 300; //ajuster en fonction de la taille réel du container
-                  final barsWidth = screenWidth / (2 * barsCount);
-                  final barsSpace = barsWidth;
-                  List<double> touchedValues = [];
-                  return BarChart(
-                    BarChartData(
-                      alignment: BarChartAlignment.center,
-                      barTouchData: BarTouchData(
-                        touchTooltipData: BarTouchTooltipData(
-                          tooltipMargin: 8,
-                          getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            String title;
-                            switch (rodIndex) {
-                              case 0:
-                                title = 'Views';
-                                break;
-                              default:
-                                title = '';
-                                break;
-                            }
-                            return BarTooltipItem(
-                              '$title : ${rod.toY.round()}',
-                              TextStyle(color: Colors.white),
-                            );
-                          },
-                        ),
-                      ),
-                      titlesData: FlTitlesData(
-                        show: true,
-                        bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            reservedSize: 28,
-                            getTitlesWidget: bottomTitles,
-                          ),
-                        ),
-                        leftTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            reservedSize: 40,
-                            getTitlesWidget: leftTitles,
-                          ),
-                        ),
-                        topTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
-                        rightTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
-                      ),
-                      gridData: FlGridData(
-                        show: true,
-                        checkToShowHorizontalLine: (value) => value % 5 == 0,
-                        getDrawingHorizontalLine: (value) => FlLine(
-                          color: Theme.of(context).colorScheme.background,
-                          strokeWidth: 1,
-                        ),
-                        drawVerticalLine: false,
-                      ),
-                      borderData: FlBorderData(
-                        show: false,
-                      ),
-                      groupsSpace: barsSpace,
-                      barGroups: getData(context, barsCount, barsWidth, barsSpace),
-                    ),
-                  );
-                },
+                fontWeight: FontWeight.bold,
               ),
             ),
-          )
-        ],
+            const SizedBox(
+              height: 8,
+            ),
+            LegendsListWidget(
+              legends: [
+                Legend("Views", Theme.of(context).colorScheme.primary),
+              ],
+            ),
+            AspectRatio(
+              aspectRatio: 1.66,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final barsCount = 5;
+                    final screenWidth = 300; //ajuster en fonction de la taille réel du container
+                    final barsWidth = screenWidth / (2 * barsCount);
+                    final barsSpace = barsWidth;
+                    List<double> touchedValues = [];
+                    return BarChart(
+                      BarChartData(
+                        alignment: BarChartAlignment.center,
+                        barTouchData: BarTouchData(
+                          touchTooltipData: BarTouchTooltipData(
+                            tooltipMargin: 8,
+                            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                              String title;
+                              switch (rodIndex) {
+                                case 0:
+                                  title = 'Views';
+                                  break;
+                                default:
+                                  title = '';
+                                  break;
+                              }
+                              return BarTooltipItem(
+                                '$title : ${rod.toY.round()}',
+                                TextStyle(color: Colors.white),
+                              );
+                            },
+                          ),
+                        ),
+                        titlesData: FlTitlesData(
+                          show: true,
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 28,
+                              getTitlesWidget: bottomTitles,
+                            ),
+                          ),
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 40,
+                              getTitlesWidget: leftTitles,
+                            ),
+                          ),
+                          topTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          rightTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                        ),
+                        gridData: FlGridData(
+                          show: true,
+                          checkToShowHorizontalLine: (value) => value % 5 == 0,
+                          getDrawingHorizontalLine: (value) => FlLine(
+                            color: Theme.of(context).colorScheme.background,
+                            strokeWidth: 1,
+                          ),
+                          drawVerticalLine: false,
+                        ),
+                        borderData: FlBorderData(
+                          show: false,
+                        ),
+                        groupsSpace: barsSpace,
+                        barGroups: getData(context, barsCount, barsWidth, barsSpace),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -232,7 +240,7 @@ class ViewersChart2 extends StatefulWidget {
   ViewersChart2({
     Key? key,
     required this.baseColor,
-    required this.creatorName,
+    required this.creatorName, required List likes, required List comments,
   }) : super(key: key);
 
   @override
@@ -306,115 +314,119 @@ class ViewersChartState2 extends State<ViewersChart2> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children :[
-          Text(
-              "Like/Comments",
+    return SlideInAnimation(
+      direction: SlideDirection.fromBottom,
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Like et Commentaires",
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                 fontSize: 16,
-                fontWeight: FontWeight.bold,)
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          LegendsListWidget(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            LegendsListWidget(
               legends: [
                 Legend("Comments", Theme.of(context).colorScheme.secondary),
                 Legend("Like", Theme.of(context).colorScheme.secondary.withOpacity(0.5)),
-              ]
-          ),
-          AspectRatio(
-            aspectRatio: 1.66,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final barsCount = 5;
-                  final screenWidth = 300; //ajuster en fonction de la taille réel du container
-                  final barsWidth = screenWidth / (2 * barsCount);
-                  final barsSpace = barsWidth;
-                  List<double> touchedValues = [];
-                  return BarChart(
-                    BarChartData(
-                      alignment: BarChartAlignment.center,
-                      barTouchData: BarTouchData(
-                        touchTooltipData: BarTouchTooltipData(
-                          tooltipMargin: 8,
-                          getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            String title;
-                            switch (rodIndex) {
-                              case 1:
-                                title = 'Comments';
-                                break;
-                              case 0:
-                                title = 'Likes';
-                                break;
-                              default:
-                                title = '';
-                                break;
-                            }
-                            return BarTooltipItem(
-                              '$title : ${infoChart.getLikes()[groupIndex]}\nComments : ${infoChart.getComments()[groupIndex]}',
-                              TextStyle(color: Colors.white),
-                            );
-                          },
-                        ),
-                      ),
-                      titlesData: FlTitlesData(
-                        show: true,
-                        bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            reservedSize: 28,
-                            getTitlesWidget: bottomTitles,
+              ],
+            ),
+            AspectRatio(
+              aspectRatio: 1.66,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final barsCount = 5;
+                    final screenWidth = 300; //ajuster en fonction de la taille réel du container
+                    final barsWidth = screenWidth / (2 * barsCount);
+                    final barsSpace = barsWidth;
+                    List<double> touchedValues = [];
+                    return BarChart(
+                      BarChartData(
+                        alignment: BarChartAlignment.center,
+                        barTouchData: BarTouchData(
+                          touchTooltipData: BarTouchTooltipData(
+                            tooltipMargin: 8,
+                            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                              String title;
+                              switch (rodIndex) {
+                                case 1:
+                                  title = 'Comments';
+                                  break;
+                                case 0:
+                                  title = 'Likes';
+                                  break;
+                                default:
+                                  title = '';
+                                  break;
+                              }
+                              return BarTooltipItem(
+                                '$title : ${infoChart.getLikes()[groupIndex]}\nComments : ${infoChart.getComments()[groupIndex]}',
+                                TextStyle(color: Colors.white),
+                              );
+                            },
                           ),
                         ),
-                        leftTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            reservedSize: 40,
-                            getTitlesWidget: leftTitles,
+                        titlesData: FlTitlesData(
+                          show: true,
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 28,
+                              getTitlesWidget: bottomTitles,
+                            ),
+                          ),
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 40,
+                              getTitlesWidget: leftTitles,
+                            ),
+                          ),
+                          topTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          rightTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
                           ),
                         ),
-                        topTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
+                        gridData: FlGridData(
+                          show: true,
+                          checkToShowHorizontalLine: (value) => value % 5 == 0,
+                          getDrawingHorizontalLine: (value) => FlLine(
+                            color: Theme.of(context).colorScheme.background,
+                            strokeWidth: 1,
+                          ),
+                          drawVerticalLine: false,
                         ),
-                        rightTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
+                        borderData: FlBorderData(
+                          show: false,
                         ),
+                        groupsSpace: barsSpace,
+                        barGroups: getData(context, barsCount, barsWidth, barsSpace),
                       ),
-                      gridData: FlGridData(
-                        show: true,
-                        checkToShowHorizontalLine: (value) => value % 5 == 0,
-                        getDrawingHorizontalLine: (value) => FlLine(
-                          color: Theme.of(context).colorScheme.background,
-                          strokeWidth: 1,
-                        ),
-                        drawVerticalLine: false,
-                      ),
-                      borderData: FlBorderData(
-                        show: false,
-                      ),
-                      groupsSpace: barsSpace,
-                      barGroups: getData(context, barsCount, barsWidth, barsSpace),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }
 
   List<BarChartGroupData> getData(BuildContext context, barsCount, double barsWidth, double barsSpace) {
-    if (_isLoading){
+    if (_isLoading) {
       const CircularProgressIndicator();
     }
     return List.generate(barsCount, (index) {
@@ -428,24 +440,31 @@ class ViewersChartState2 extends State<ViewersChart2> {
         showingTooltipIndicators: isTouched ? [0] : [],
         barRods: [
           BarChartRodData(
-            toY:  likes[index] + comments[index] as double,
+            toY: likes[index] + comments[index] as double,
             color: Theme.of(context).colorScheme.background,
             rodStackItems: [
-              BarChartRodStackItem(0, comments[index] as double, Theme.of(context).colorScheme.secondary,
+              BarChartRodStackItem(
+                0,
+                comments[index] as double,
+                Theme.of(context).colorScheme.secondary,
                 BorderSide(
                   color: Colors.white,
                   width: isTouched ? 2 : 0,
-                ),),
-              BarChartRodStackItem(comments[index] as double , likes[index] as double , Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+                ),
+              ),
+              BarChartRodStackItem(
+                comments[index] as double,
+                likes[index] as double,
+                Theme.of(context).colorScheme.secondary.withOpacity(0.5),
                 BorderSide(
                   color: Colors.white,
                   width: isTouched ? 2 : 0,
-                ),),
-
+                ),
+              ),
             ],
             borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10)
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
             ),
             width: barsWidth,
           ),
@@ -462,7 +481,7 @@ class ViewersChart3 extends StatefulWidget {
   ViewersChart3({
     Key? key,
     required this.baseColor,
-    required this.creatorName,
+    required this.creatorName, required List likes, required List views, required List comments,
   }) : super(key: key);
 
   @override
@@ -536,114 +555,114 @@ class ViewersChartState3 extends State<ViewersChart3> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children :[
-          Text(
-              "Stats",
+    return SlideInAnimation(
+      direction: SlideDirection.fromBottom,
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Ratio Like/Vues",
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                 fontSize: 16,
-                fontWeight: FontWeight.bold,)
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          LegendsListWidget(
-              legends: [
-                Legend("Ratio Likes/Views", Theme.of(context).colorScheme.tertiary),
-              ]
-          ),
-          AspectRatio(
-            aspectRatio: 1.66,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final barsCount = 5;
-                  final screenWidth = 300; //ajuster en fonction de la taille réel du container
-                  final barsWidth = screenWidth / (2 * barsCount);
-                  final barsSpace = barsWidth;
-                  List<double> touchedValues = [];
-                  return BarChart(
-                    BarChartData(
-                      alignment: BarChartAlignment.center,
-                      barTouchData: BarTouchData(
-                        touchTooltipData: BarTouchTooltipData(
-                          tooltipMargin: 8,
-                          getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            String title;
-                            switch (rodIndex) {
-                              case 0:
-                                title = 'Ratio like/views';
-                                break;
-                              default:
-                                title = '';
-                                break;
-                            }
-                            return BarTooltipItem(
-                              '$title : ${rod.toY.round()}%',
-                              TextStyle(color: Colors.white),
-                            );
-                          },
-                        ),
-                      ),
-                      titlesData: FlTitlesData(
-                        show: true,
-                        bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            reservedSize: 28,
-                            getTitlesWidget: bottomTitles,
-                          ),
-                        ),
-                        leftTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            reservedSize: 40,
-
-                            getTitlesWidget: leftTitles,
-                          ),
-                        ),
-                        topTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
-                        rightTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
-                      ),
-                      gridData: FlGridData(
-                        show: true,
-                        checkToShowHorizontalLine: (value) => value % 5 == 0,
-                        getDrawingHorizontalLine: (value) => FlLine(
-                          color: Theme.of(context).colorScheme.background,
-                          strokeWidth: 1,
-                        ),
-                        drawVerticalLine: false,
-                      ),
-                      borderData: FlBorderData(
-                        show: false,
-                      ),
-                      groupsSpace: barsSpace,
-                      barGroups: getData(context, barsCount, barsWidth, barsSpace),
-                    ),
-                  );
-                },
+                fontWeight: FontWeight.bold,
               ),
             ),
-          )
-        ],
+            const SizedBox(
+              height: 8,
+            ),
+            LegendsListWidget(
+              legends: [
+                Legend("Ratio Likes/Views", Theme.of(context).colorScheme.tertiary),
+              ],
+            ),
+            AspectRatio(
+              aspectRatio: 1.66,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final barsCount = 5;
+                    final screenWidth = 300; //ajuster en fonction de la taille réel du container
+                    final barsWidth = screenWidth / (2 * barsCount);
+                    final barsSpace = barsWidth;
+                    List<double> touchedValues = [];
+                    return BarChart(
+                      BarChartData(
+                        alignment: BarChartAlignment.center,
+                        barTouchData: BarTouchData(
+                          touchTooltipData: BarTouchTooltipData(
+                            tooltipMargin: 8,
+                            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                              String title;
+                              switch (rodIndex) {
+                                case 0:
+                                  title = 'Ratio like/views';
+                                  break;
+                                default:
+                                  title = '';
+                                  break;
+                              }
+                              return BarTooltipItem(
+                                '$title : ${rod.toY.round()}%',
+                                TextStyle(color: Colors.white),
+                              );
+                            },
+                          ),
+                        ),
+                        titlesData: FlTitlesData(
+                          show: true,
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 28,
+                              getTitlesWidget: bottomTitles,
+                            ),
+                          ),
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 40,
+                              getTitlesWidget: leftTitles,
+                            ),
+                          ),
+                          topTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          rightTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                        ),
+                        gridData: FlGridData(
+                          show: true,
+                          checkToShowHorizontalLine: (value) => value % 5 == 0,
+                          getDrawingHorizontalLine: (value) => FlLine(
+                            color: Theme.of(context).colorScheme.background,
+                            strokeWidth: 1,
+                          ),
+                          drawVerticalLine: false,
+                        ),
+                        borderData: FlBorderData(
+                          show: false,
+                        ),
+                        groupsSpace: barsSpace,
+                        barGroups: getData(context, barsCount, barsWidth, barsSpace),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   List<BarChartGroupData> getData(BuildContext context, barsCount, double barsWidth, double barsSpace) {
-    if (_isLoading){
-      const CircularProgressIndicator();
-    }
     return List.generate(barsCount, (index) {
       final videoIndex = index + 1;
       List<int> likes = infoChart.getLikes();
@@ -664,19 +683,22 @@ class ViewersChartState3 extends State<ViewersChart3> {
         showingTooltipIndicators: isTouched ? [0] : [],
         barRods: [
           BarChartRodData(
-            toY:  ratio[index] as double,
+            toY: ratio[index],
             color: Theme.of(context).colorScheme.background,
             rodStackItems: [
-              BarChartRodStackItem(0, ratio[index] , Theme.of(context).colorScheme.tertiary,
+              BarChartRodStackItem(
+                0,
+                ratio[index],
+                Theme.of(context).colorScheme.tertiary,
                 BorderSide(
                   color: Colors.white,
                   width: isTouched ? 2 : 0,
-                ),),
-
+                ),
+              ),
             ],
             borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10)
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
             ),
             width: barsWidth,
           ),
