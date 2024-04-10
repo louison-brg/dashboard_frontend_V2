@@ -138,7 +138,7 @@ class CreatorCard extends StatelessWidget {
           SizedBox(height: 10),
           SizedBox(
             width: 510,
-            height: 350,
+            height: 337,
             child: Card(
               elevation: 4.0,
               color: backgroundColor.withOpacity(0.7),
@@ -190,7 +190,7 @@ class CreatorCard extends StatelessWidget {
                       color: backgroundColor.withOpacity(0.7),
                       child: SizedBox(
                         width: 510,
-                        height: 145,
+                        height: 130,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
