@@ -166,16 +166,23 @@ class _CreatorDashboardState extends State<CreatorDashboard> {
                   ViewersChart1(
                     baseColor: Theme.of(context).colorScheme.onPrimary,
                     creatorName: _creatorInfo!.channelName,
+                    views: _infoChart != null ? _infoChart!.getViews() : [],
+                    dates: _infoChart != null ? _infoChart!.getDates() : [],
                   ),
                 if (_creatorInfo != null)
                   ViewersChart2(
                     baseColor: Theme.of(context).colorScheme.onPrimary,
                     creatorName: _creatorInfo!.channelName,
+                    likes: _infoChart != null ? _infoChart!.getLikes() : [],
+                    comments: _infoChart != null ? _infoChart!.getComments() : [],
                   ),
                 if (_creatorInfo != null)
                   ViewersChart3(
                     baseColor: Theme.of(context).colorScheme.onPrimary,
                     creatorName: _creatorInfo!.channelName,
+                    likes: _infoChart != null ? _infoChart!.getLikes() : [],
+                    views: _infoChart != null ? _infoChart!.getViews() : [],
+                    comments: _infoChart != null ? _infoChart!.getComments() : [],
                   ),
               ],
             ),
